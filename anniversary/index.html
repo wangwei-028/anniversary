@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- 禁止缩放、适配刘海屏；竖屏优先 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#3a1d3f">
+  <meta name="format-detection" content="telephone=no">
+  <title>奔向你 · 我们的365天</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 主画布：低分辨率像素缓冲按整数倍放大后画在这里，HUD 文字也画在这里 -->
+    <canvas id="game"></canvas>
+    <!-- DOM 界面层：菜单、按钮、面板（位置与游戏区域对齐） -->
+    <div id="ui"></div>
+
+    <!-- 桌面横屏时，在游戏区域两侧显示操作说明 -->
+    <aside id="side-help" aria-hidden="true">
+      <h3>键盘操作</h3>
+      <p><b>← → / A D</b> 变道</p>
+      <p><b>↑ / W / 空格</b> 跳跃</p>
+      <p><b>↓ / S</b> 滑铲（空中可急降）</p>
+      <p><b>J / 鼠标点击</b> 反击（Boss 硬直时：金圈时刻拍击）</p>
+      <p><b>L / 双击屏幕</b> 技能「回忆闪光」</p>
+      <p><b>Esc</b> 暂停</p>
+      <p class="tip">鼠标按住拖动也能当"滑动手势"用</p>
+    </aside>
+
+    <div id="boot">加载中…</div>
+    <div id="boot-error" hidden>
+      <h2>游戏没能启动 (｡•́︿•̀｡)</h2>
+      <div id="boot-error-file" hidden>
+        <p>你是直接双击打开的 <code>index.html</code>。<br>Chrome / Edge 出于安全策略，不允许本地文件加载 ES 模块。</p>
+        <p><b>解决办法（任选其一）：</b></p>
+        <ol>
+          <li>双击项目里的 <b>「启动游戏.bat」</b>（会自动开一个本地服务器并打开浏览器）</li>
+          <li>用 <b>Firefox</b> 浏览器直接打开 index.html</li>
+          <li>部署到 GitHub Pages 后用网址打开（手机推荐这种）</li>
+        </ol>
+      </div>
+      <p id="boot-error-detail"></p>
+    </div>
+  </div>
+
+  <script>
+    // 非模块脚本：用于检测 ES 模块是否成功启动（file:// 协议下 Chrome 会拦截模块）
+    window.__bootOk = false;
+    window.__bootErrors = [];
+    window.addEventListener('error', function (e) {
+      window.__bootErrors.push(String(e.message || e));
+    });
+    window.__showBootError = function () {
+      if (window.__bootOk) return;
+      var boot = document.getElementById('boot');
+      if (boot) boot.style.display = 'none';
+      document.getElementById('boot-error').hidden = false;
+      if (location.protocol === 'file:') {
+        document.getElementById('boot-error-file').hidden = false;
+      }
+      if (window.__bootErrors.length) {
+        document.getElementById('boot-error-detail').textContent = '错误信息：' + window.__bootErrors.join(' | ');
+      }
+    };
+    setTimeout(window.__showBootError, 4000);
+  </script>
+  <script type="module" src="main.js" onerror="window.__showBootError()"></script>
+</body>
+</html>
