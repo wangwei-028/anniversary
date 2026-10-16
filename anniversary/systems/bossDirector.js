@@ -642,8 +642,7 @@ export class BossDirector {
     const free = this.pickFreeLane();
     const m = this.speedMul();
     const telegraph = this.params.warning + cfg.telegraphExtra;
-    const travel = (this.data.z - 1) / (cfg.speed * m);
-    for (let l = -1; l <= 1; l++) if (l !== free) this.world.laneWarn[l + 1] = telegraph + travel + 0.2;
+    // 不亮红灯：购物车阵只有 1.3m，低于跳跃顶点 1.8m，原地起跳就能过（红灯只留给跳不过也铲不过的攻击）
     this.boss.targetX = free === 0 ? 0 : -free * LANE_W * 0.5;
     if (free === 0) {
       this.schedule(telegraph, 'cart', -1, 1, m);
@@ -744,6 +743,7 @@ export class BossDirector {
     const m = this.speedMul();
     const telegraph = this.params.warning + cfg.telegraphExtra;
     const travel = (this.data.z - 1) / (cfg.speed * m);
+    // 保留红灯：地毯长 8m，普通跳跃滞空 0.6s 飞不完全程，只有弹床那条道能活 = 事实上的"必须变道"
     for (let l = -1; l <= 1; l++) if (l !== springLane) this.world.laneWarn[l + 1] = telegraph + travel;
     this.boss.targetX = springLane * LANE_W;
     this.schedule(telegraph, 'carpet', springLane, 1, m, key);
@@ -1328,14 +1328,14 @@ export class BossDirector {
       return;
     }
     this.hp--;
-    b.flash = 0.35;
+    b.flash = 0.18; // 白剪影一闪即止：反击频繁时太长会像"Boss 一直在闪"
     b.expr = 'hurt';
     b.stunned = false;
     b.sx = 1.3;
     b.sy = 0.7;
     this.world.hitStop = 0.14;
     this.world.camera.shake(JUICE.shakeBossHit);
-    this.world.flashWhite = 0.4;
+    this.world.flashWhite = 0.2;
     this.audio.play('bossHit');
     if (b.screenX) {
       this.world.particles.burst(PK.STAR, b.screenX, b.screenY, 14, 90, 0.7, GOLD_COLORS, 40);

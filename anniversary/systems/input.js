@@ -3,7 +3,7 @@ import { TOUCH } from '../data/constants.js';
 /**
  * 输入系统：把键盘 / 触摸 / 鼠标统一成"动作"，放进一个固定大小的环形队列。
  * 动作：left right up down counter skill pause
- * - 触摸滑动：超过阈值立即触发（不用等松手），同一次按住可以继续滑出第二个动作
+ * - 触摸滑动：超过阈值立即触发（不用等松手）；一次按住只触发一个动作，想再来一次要抬手重滑
  * - 点击（短按且几乎没移动）：counter（反击）
  * - 双击（两次点击间隔 ≤ TOUCH.doubleTapTime）：skill（释放技能，第一击照常作为 counter）
  * - 输入缓冲（提前按下、稍后执行）在 entities/player.js 里实现
@@ -145,6 +145,8 @@ export class Input {
 
   onPointerMove(e) {
     if (e.pointerId !== this.pointerId || !this.gestureEnabled) return;
+    // 一次按住只允许滑出一个动作：不管行程多长，都不重复触发（否则快甩一次会连移两格）
+    if (this.fired) return;
     const dx = e.clientX - this.startX;
     const dy = e.clientY - this.startY;
     const th = TOUCH.swipeThreshold;
@@ -155,9 +157,6 @@ export class Input {
       this.push(dy > 0 ? ACTION.DOWN : ACTION.UP);
     }
     this.fired = true;
-    // 以当前位置作为新的起点：同一次按住可以继续滑出下一个动作
-    this.startX = e.clientX;
-    this.startY = e.clientY;
   }
 
   onPointerUp(e, cancelled) {

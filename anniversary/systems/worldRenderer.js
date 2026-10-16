@@ -51,6 +51,56 @@ function decal(ctx, cam, img, x, z, wM, alpha, yOff = 0) {
   ctx.drawImage(img, Math.round(cam.px - w / 2), Math.round(cam.py - h / 2), Math.max(1, Math.round(w)), Math.max(1, Math.round(h)));
 }
 
+// 障碍描边颜色 = 应对动作：黄 = 跳过去，蓝 = 下铲钻过去，红 = 跳不过也铲不过（必须变道）
+const GLOW_JUMP = '#ffd23f';
+const GLOW_SLIDE = '#4dd2ff';
+const GLOW_BLOCK = '#ff4d5e';
+
+/** 给精灵生成 2px 彩色描边版本（按精灵画布缓存，一次性生成） */
+function glowSprite(img, color) {
+  const key = '__glow_' + color;
+  if (img[key]) return img[key];
+  const pad = 2;
+  const c = makeCanvas(img.width + pad * 2, img.height + pad * 2);
+  const ctx = c.getContext('2d');
+  // 本体的纯色剪影
+  const tint = makeCanvas(img.width, img.height);
+  const tctx = tint.getContext('2d');
+  tctx.drawImage(img, 0, 0);
+  tctx.globalCompositeOperation = 'source-in';
+  tctx.fillStyle = color;
+  tctx.fillRect(0, 0, img.width, img.height);
+  for (let dy = -pad; dy <= pad; dy++) {
+    for (let dx = -pad; dx <= pad; dx++) {
+      if (dx === 0 && dy === 0) continue;
+      ctx.drawImage(tint, pad + dx, pad + dy);
+    }
+  }
+  ctx.drawImage(img, pad, pad);
+  img[key] = c;
+  return c;
+}
+
+/** 跳跃抛物线中，脚底保持在 height 以上的时长（顶点 1.8m、滞空 0.6s 反推） */
+function airTimeAbove(height) {
+  if (height >= PLAYER.jumpHeight) return 0;
+  return PLAYER.jumpAirTime * Math.sqrt(Math.max(0, 1 - height / PLAYER.jumpHeight));
+}
+
+/** 障碍描边颜色（返回 null = 不描边）。跳不过也铲不过的给红，与红色车道预警同一套规则 */
+function outlineFor(world, h) {
+  if (h.kind === 'high') return GLOW_SLIDE;
+  if (h.kind === 'low') {
+    if (h.walkable) return GLOW_JUMP; // 购物车顶能踩上去，多长都算"跳"
+    // 通行时间比"跳起后保持在障碍高度以上的时间"还长 → 跳不过（如 8m 香蕉地毯）
+    const approach = (h.anchored ? world.speedNow : 0) + (h.vz || 0);
+    if (approach > 0 && h.len / approach > airTimeAbove(h.height)) return GLOW_BLOCK;
+    return GLOW_JUMP;
+  }
+  if (h.kind === 'full') return h.height >= PLAYER.jumpHeight ? GLOW_BLOCK : GLOW_JUMP;
+  return null;
+}
+
 function pushItem(world, z, kind, ref) {
   if (world.renderCount >= world.renderList.length) return;
   const it = world.renderList[world.renderCount++];
@@ -278,7 +328,9 @@ function drawHazard(world, ctx, cam, h) {
     if (cam.project(x, y + 0.8, z)) world.particles.spawn(2, cam.px + (Math.random() - 0.5) * 8, cam.py, 0, 10, 0.3, 1, '#fff');
     return;
   }
-  const img = spriteOf(world, h);
+  // 高低 / 能否通过一目了然的彩色描边（潮汐 / 塌陷坑这类平铺地面的 strip 不描）
+  const outline = h.draw === 'strip' ? null : outlineFor(world, h);
+  const img = outline ? glowSprite(spriteOf(world, h), outline) : spriteOf(world, h);
   const by = h.bob ? h.bob * (1 + Math.sin(world.time * 3 + h.z * 0.4)) : 0;
   switch (h.draw) {
     case 'train': {
@@ -389,13 +441,15 @@ function drawPlayer(world, ctx, cam, p) {
     return;
   }
 
-  // 无敌闪烁
-  if (p.invincible > 0 && !p.dead && Math.floor(p.invincible * 14) % 2 === 0) return;
+  // 无敌闪烁：半透明脉动（不再整帧消失，手机低帧率下不会"频闪不见"）；技能无敌不闪
+  const blinkHide = p.invincible > 0 && !p.dead && p.skillInvT <= 0 && Math.floor(p.invincible * 14) % 2 === 0;
+  if (blinkHide) ctx.globalAlpha = 0.45;
   const img = p.flash > 0 ? (boy ? S.boyFlash : S.girlFlash)[key] : set[key];
   const sq = p.squash;
   const w = Math.round((32 * (1 + sq * 0.22)) / 2) * 2;
   const h = Math.round(32 * (1 - sq * 0.22));
   ctx.drawImage(img, Math.round(px - w / 2), Math.round(py - h + 1), w, h);
+  if (blinkHide) ctx.globalAlpha = 1;
   // 打滑：头顶冒问号
   if (p.slipTimer > 0) ctx.drawImage(S.pStar, Math.round(px - 2 + Math.sin(world.time * 20) * 4), Math.round(py - 38));
   // 护盾泡泡

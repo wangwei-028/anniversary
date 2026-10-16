@@ -54,6 +54,9 @@ export class Screen {
     this.H = H;
     this.ox = Math.floor((devW - W * scale) / 2);
     this.oy = Math.floor((devH - H * scale) / 2);
+    // 手机地址栏收展 / 回弹会连发 resize，但尺寸往往没变：重设 canvas 尺寸会清空画布 → 整屏闪白。
+    // 只有尺寸真正变化时才碰画布 / 样式 / UI 对齐。
+    if (!changed) return;
 
     this.canvas.width = devW;
     this.canvas.height = devH;
@@ -75,10 +78,8 @@ export class Screen {
     ui.style.height = (H * scale) / dpr + 'px';
     document.documentElement.style.setProperty('--px', this.cssPx + 'px');
 
-    if (changed) {
-      this.version++;
-      if (this.onResize) this.onResize();
-    }
+    this.version++;
+    if (this.onResize) this.onResize();
   }
 
   /** 把像素缓冲放大画到主画布（shakeX/shakeY 单位：缓冲像素，可为小数 → 震动更顺滑） */

@@ -465,7 +465,7 @@ export const PENDING = {
       h.top = c.highTop;
     }
     h.vz = c.speed * p.speedMul;
-    d.world.laneWarn[p.lane + 1] = c.beat + travel(d, c) + 0.2;
+    // 不亮红灯：低荡可跳、高荡可铲，都能原地躲开（红灯只留给跳不过也铲不过的攻击）
     d.audio.play(low ? 'throw' : 'bubble', 0.8);
   },
 

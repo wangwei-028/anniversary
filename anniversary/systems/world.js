@@ -573,15 +573,18 @@ export class World {
         this.maybeTip(h);
       }
 
-      // 彩带直线弹 / 潮水：到达前 warnLead 秒把所在车道标红（潮水还让屏幕两侧泛蓝）
+      // 彩带直线弹 / 潮水：到达前 warnLead 秒提醒（潮水还让屏幕两侧泛蓝）
       if (h.warnLead && !h.warned) {
         const tau = this.timeToImpact(h);
         if (tau >= 0 && tau <= h.warnLead) {
           h.warned = true;
           const dur = tau + h.len / Math.max(1, speed + (h.vz || 0));
-          for (let l = 0; l < h.lanes; l++) {
-            const li = h.lane + l + 1;
-            if (li >= 0 && li < 3) this.laneWarn[li] = Math.max(this.laneWarn[li], dur);
+          // 红灯只留给跳不过（≥跳跃顶点 1.8m）也铲不过的障碍：小丑彩带 1.6m 可跳过 → 只响警示音
+          if (h.kind === 'full' && h.height >= PLAYER.jumpHeight) {
+            for (let l = 0; l < h.lanes; l++) {
+              const li = h.lane + l + 1;
+              if (li >= 0 && li < 3) this.laneWarn[li] = Math.max(this.laneWarn[li], dur);
+            }
           }
           if (h.edgeWarn) {
             this.tideWarn = Math.max(this.tideWarn, dur);
@@ -1027,8 +1030,9 @@ export class World {
     if (this.listener && this.listener.onSkillCast) this.listener.onSkillCast(cleared);
     this.skillBoostT = SKILL.boostTime;
     this.player.invincible = Math.max(this.player.invincible, SKILL.invincibleTime);
+    this.player.skillInvT = this.player.invincible; // 技能无敌期间不闪烁（否则手机上频闪很难受）
     this.bulletTime = Math.max(this.bulletTime, SKILL.bulletTime);
-    this.flashWhite = 0.6;
+    this.flashWhite = 0.35;
     this.camera.shake(JUICE.shakeBossHit);
     this.audio.play('fever');
     this.audio.play('perfect', 1.4);

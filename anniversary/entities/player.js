@@ -35,6 +35,7 @@ export class Player {
     this.slideOnLand = false;
     this.fastFall = false;
     this.invincible = 0;
+    this.skillInvT = 0; // 技能附带的无敌剩余时间：这段无敌不闪烁（受击无敌才闪）
     this.locked = 0; // 被弹回 / 被砸懵时短暂不能操作（输入会被缓冲）
     this.lockKind = '';
     this.flash = 0;
@@ -296,6 +297,7 @@ export class Player {
     if (this.sliding > 0) this.sliding -= dt;
     if (this.slipTimer > 0) this.slipTimer -= dt;
     if (this.invincible > 0) this.invincible -= dt;
+    if (this.skillInvT > 0) this.skillInvT -= dt;
     if (this.locked > 0) this.locked -= dt;
     if (this.flash > 0) this.flash -= dt;
     this.squash *= Math.exp(-12 * dt);
