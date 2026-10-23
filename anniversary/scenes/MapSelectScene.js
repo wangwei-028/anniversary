@@ -45,6 +45,7 @@ export class MapSelectScene {
       tabs,
       button(g, TEXTS.shop, 'small', () => g.switchScene('shop')),
       button(g, TEXTS.gallery, 'small ghost', () => g.switchScene('gallery')),
+      button(g, 'Boss练习场', 'small ghost', () => g.switchScene('practice')),
     );
     if (g.save.allCleared()) tabs.appendChild(button(g, '无尽模式', 'small ghost', () => this.openEndlessPrep()));
     const list = el('div', 'level-list');

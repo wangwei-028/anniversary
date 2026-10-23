@@ -28,7 +28,7 @@ export class GameSession {
     this.coinBonus = 1 + up('coinSense') * getUpgrade('coinSense').perLevel;
     this.energyMul = 1 + up('focus') * getUpgrade('focus').perLevel;
     this.itemBonus = up('itemMaster') * getUpgrade('itemMaster').perLevel;
-    this.permDoubleJump = up('bootsUpgrade') > 0;
+    this.doubleJumps = up('bootsUpgrade') ? getUpgrade('bootsUpgrade').charges || 3 : 0; // 弹跳鞋：每局固定次数的二段跳
     this.revives = (up('reviveChance') ? 1 : 0) + loadout.filter((id) => id === 'reviveCoin').length;
     this.revivesUsed = 0;
     this.bossShieldItem = loadout.includes('bossShield');
@@ -80,6 +80,7 @@ export class GameSession {
       energy: this.energy,
       character: this.character,
       ammo: this.ammo,
+      doubleJumps: this.doubleJumps,
     };
     // LOVE FEVER：进入 Boss 战瞬间，当前剩余 CD 也一并减半
     if (this.swapCd > 0) this.swapCd *= PARTNER.feverMul;
@@ -94,10 +95,16 @@ export class GameSession {
     this.energy = s.energy;
     this.character = s.character;
     this.ammo = s.ammo;
+    this.doubleJumps = s.doubleJumps;
     this.coinCombo = 0;
     this.powerups.magnet = 0;
     this.powerups.coinRain = 0;
     this.powerups.springShoes = 0;
+  }
+
+  /** 消耗一次弹跳鞋二段跳（局内 8 秒弹跳鞋道具生效期内不消耗次数） */
+  spendDoubleJump() {
+    if (this.powerups.springShoes <= 0 && this.doubleJumps > 0) this.doubleJumps--;
   }
 
   addEnergy(v) {

@@ -34,7 +34,7 @@ export class ResultScene {
     const res = settleLevel(g.save, s, this.cleared);
     this.setupBackground();
 
-    const panel = el('div', 'panel modal result-panel');
+    const panel = el('div', 'panel modal result-panel scrollable');
 
     const boss = BOSSES[s.level.bossId];
     const bossName = boss ? boss.name : 'Boss';
@@ -147,7 +147,7 @@ export class ResultScene {
   buildEndless(res, s) {
     const g = this.game;
     const line = this.lineMaker();
-    const panel = el('div', 'panel modal result-panel');
+    const panel = el('div', 'panel modal result-panel scrollable');
     const lines = el('div', 'result-lines');
     append(
       lines,
@@ -173,7 +173,7 @@ export class ResultScene {
   buildRush(res) {
     const g = this.game;
     const line = this.lineMaker();
-    const panel = el('div', 'panel modal result-panel');
+    const panel = el('div', 'panel modal result-panel scrollable');
     const lines = el('div', 'result-lines');
     const mm = Math.floor(res.time / 60);
     const ss = Math.floor(res.time % 60);

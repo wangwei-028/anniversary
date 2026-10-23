@@ -150,6 +150,7 @@ export class Player {
       this.capturePre();
       this.vy = JUMP_V0 * PLAYER.doubleJumpRatio;
       this.airJumpsUsed++;
+      this.world.session.spendDoubleJump();
       this.slideOnLand = false;
       this.fastFall = false;
       this.squash = -1;

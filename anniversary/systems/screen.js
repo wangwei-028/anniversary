@@ -10,7 +10,8 @@ import { SCREEN } from '../data/constants.js';
 export class Screen {
   constructor(canvas, ui) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
+    // alpha:false —— 游戏画面永远铺满整个画布，不透明合成可以绕开部分手机 GPU 的透明混合路径
+    this.ctx = canvas.getContext('2d', { alpha: false });
     this.ui = ui;
     this.buffer = document.createElement('canvas');
     this.bctx = this.buffer.getContext('2d');
@@ -39,6 +40,12 @@ export class Screen {
     const cssH = window.innerHeight;
     const devW = Math.max(1, Math.round(cssW * dpr));
     const devH = Math.max(1, Math.round(cssH * dpr));
+
+    // 手机地址栏收展：高度小幅来回抖，每次重设画布都会清空 → 游戏中反复闪一帧空白
+    // （电脑没有地址栏、微信 webview 也没有，所以只有手机浏览器闪）。
+    // 对策：高度变小一律忽略（画面保持全屏高度，顶多被地址栏盖住一条边），
+    // 只有高度变大（地址栏收回 / 转屏后变宽）或宽度变化才真正重设。
+    if (this.canvas.width > 0 && devW === this.devW && devH < this.devH) return;
 
     // 整数放大倍率：保证缓冲至少 minW × minH
     const scale = Math.max(1, Math.floor(Math.min(devW / SCREEN.minW, devH / SCREEN.minH)));
@@ -87,7 +94,9 @@ export class Screen {
     const ctx = this.ctx;
     const s = this.scale;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, this.devW, this.devH);
+    // 画布外露边距（桌面横屏两侧）填成页面同款底色
+    ctx.fillStyle = '#3a1d3f';
+    ctx.fillRect(0, 0, this.devW, this.devH);
     ctx.save();
     ctx.beginPath();
     ctx.rect(this.ox, this.oy, this.W * s, this.H * s);

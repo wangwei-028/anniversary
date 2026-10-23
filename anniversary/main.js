@@ -20,6 +20,7 @@ import { ShopScene } from './scenes/ShopScene.js';
 import { GalleryScene } from './scenes/GalleryScene.js';
 import { RunScene } from './scenes/RunScene.js';
 import { BossScene } from './scenes/BossScene.js';
+import { BossPracticeScene } from './scenes/BossPracticeScene.js';
 import { ResultScene } from './scenes/ResultScene.js';
 import { EndlessScene } from './scenes/EndlessScene.js';
 import { BossRushScene } from './scenes/BossRushScene.js';
@@ -66,6 +67,7 @@ class Game {
       gallery: new GalleryScene(this),
       run: new RunScene(this),
       boss: new BossScene(this),
+      practice: new BossPracticeScene(this),
       result: new ResultScene(this),
       endless: new EndlessScene(this),
       rush: new BossRushScene(this),

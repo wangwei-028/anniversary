@@ -853,7 +853,7 @@ export class World {
   // ------------------------------------------------------------
 
   canDoubleJump() {
-    return this.session.permDoubleJump || this.session.powerups.springShoes > 0;
+    return this.session.doubleJumps > 0 || this.session.powerups.springShoes > 0;
   }
 
   onCounter() {
@@ -890,6 +890,10 @@ export class World {
         this.audio.play('doubleJump');
         this.particles.ring(sx, sy, 12, 0.3, '#ffffff');
         this.particles.burst(PK.STAR_WHITE, sx, sy, 5, 40, 0.4, PINK_COLORS);
+        // 弹跳鞋次数用完的瞬间提醒一次，避免"怎么突然跳不出来了"的困惑
+        if (!this.session.doubleJumps && this.session.powerups.springShoes <= 0) {
+          this.hud.tip('本局弹跳鞋的二段跳次数用完了', 1.8);
+        }
         break;
       case 'slide':
       case 'slideLand':

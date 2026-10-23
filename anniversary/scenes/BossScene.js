@@ -1,20 +1,23 @@
 import { PlayScene } from './PlayScene.js';
 import { BossDirector } from '../systems/bossDirector.js';
 import { BOSSES } from '../data/bosses.js';
-import { BOSS_RULES } from '../data/difficulty.js';
+import { BOSS_RULES, DIFFICULTY_MODES } from '../data/difficulty.js';
 import { SPEED } from '../data/constants.js';
 import { TEXTS } from '../data/texts.js';
 import { el, append, button } from '../systems/ui.js';
+import { GameSession } from '../systems/session.js';
 
 /**
  * Boss 战：登场演出（名条 + LOVE FEVER）→ 三阶段弹幕 → 硬直窗口还击（反弹 / 踩跳 / 投掷）→ 击败演出。
  * 失败：可用复活先复活（不消耗重开次数）；否则从 Boss 战开头重开（金币不损失），每关 2 次；
  *       第 3 次失败 = 本关失败（金币仍全额入账）。
+ * 练习模式（params.practice，来自 Boss 练习场）：无限重试、胜利 / 失败弹练习面板、金币与进度不入账。
  */
 export class BossScene extends PlayScene {
   enter(params) {
     const g = this.game;
     const s = params.session;
+    this.practice = !!params.practice;
     this.session = s;
     this.banked = false;
     const w = g.world;
@@ -33,6 +36,14 @@ export class BossScene extends PlayScene {
     this.state = 'play';
     this.paused = false;
     this.deathT = 0;
+    if (!this.practice) {
+      // 练习场解锁条件：主线中遇到过这只 Boss（进过它的 Boss 战，输赢都算）
+      const rec = g.save.getLevel(s.levelId);
+      if (!rec.bossSeen) {
+        rec.bossSeen = true;
+        g.save.save();
+      }
+    }
     g.audio.stopMusic();
     g.audio.playMusic(s.level.bossMusic);
     this.buildHud();
@@ -123,6 +134,10 @@ export class BossScene extends PlayScene {
 
   onDefeated() {
     this.state = 'won';
+    if (this.practice) {
+      this.showPracticePanel(true);
+      return;
+    }
     // 最终关：先播"回家"演出，再结算
     if (this.session.level.finale) this.game.switchScene('ending', { session: this.session });
     else this.game.switchScene('result', { session: this.session, cleared: true });
@@ -131,6 +146,10 @@ export class BossScene extends PlayScene {
   showRetry() {
     const g = this.game;
     const s = this.session;
+    if (this.practice) {
+      this.showPracticePanel(false);
+      return;
+    }
     if (s.bossRetriesLeft <= 0) {
       g.switchScene('result', { session: s, cleared: false, reason: 'boss' });
       return;
@@ -181,6 +200,67 @@ export class BossScene extends PlayScene {
     g.input.clear();
     g.audio.stopMusic();
     g.audio.playMusic(s.level.bossMusic);
+  }
+
+  // ---------------- 练习模式（Boss 练习场） ----------------
+
+  /** 练习结束面板（胜利 / 倒下共用）：无限次再战，随时回练习场 */
+  showPracticePanel(won) {
+    const g = this.game;
+    const wrap = el('div', 'interactive');
+    wrap.style.position = 'absolute';
+    wrap.style.inset = '0';
+    const panel = el('div', 'panel modal');
+    const btns = el('div', 'btns');
+    append(
+      btns,
+      button(g, won ? '再练一次' : '再战一次', 'big', () => this.restartPractice()),
+      button(g, '返回练习场', 'ghost', () => g.switchScene('practice')),
+    );
+    append(panel, el('h2', null, won ? '胜利！' : '差一点！'), el('p', null, (won ? '击败了 ' : '被 ') + this.data.title + ' ' + this.data.name + (won ? '！' : ' 拿下了，再来！') + '（练习不影响主线进度）'), btns);
+    append(wrap, el('div', 'dim'), panel);
+    this.root.appendChild(wrap);
+    this.modal = wrap;
+    g.input.clear();
+  }
+
+  /** 练习重开：用和主线一致的能力重新构建一局（满状态从头打） */
+  restartPractice() {
+    const g = this.game;
+    const dif = g.save.data.settings.difficulty;
+    const mode = DIFFICULTY_MODES[dif] ? dif : 'standard';
+    g.switchScene('boss', { session: new GameSession(this.session.levelId, mode, g.save, []), practice: true });
+  }
+
+  /** 练习不入账：金币 / 通关 / 存档进度都不动 */
+  bankCoins() {
+    if (this.practice) {
+      this.banked = true;
+      return;
+    }
+    super.bankCoins();
+  }
+
+  pauseInfo() {
+    return this.practice ? 'Boss 练习场 · 金币与进度不会保存' : super.pauseInfo();
+  }
+
+  menuRestart() {
+    if (!this.practice) {
+      super.menuRestart();
+      return;
+    }
+    this.game.audio.resume();
+    this.restartPractice();
+  }
+
+  menuQuit() {
+    if (!this.practice) {
+      super.menuQuit();
+      return;
+    }
+    this.game.audio.resume();
+    this.game.switchScene('practice');
   }
 
   debugHit() {

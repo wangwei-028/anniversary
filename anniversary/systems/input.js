@@ -69,7 +69,7 @@ export class Input {
     document.addEventListener(
       'touchmove',
       (e) => {
-        if (!e.target.closest || !e.target.closest('.level-list, .prep, .theater-letter, .scrollable')) e.preventDefault();
+        if (!e.target.closest || !e.target.closest('.level-list, .prep, .theater-letter, .result-panel, .scrollable')) e.preventDefault();
       },
       { passive: false },
     );

@@ -9,7 +9,7 @@ export const UPGRADES = [
   { id: 'focus', name: '专注', desc: '还击能量获取 +15%/级', base: 450, max: 5, perLevel: 0.15 },
   { id: 'itemMaster', name: '道具大师', desc: '拾取道具时长 +2 秒/级', base: 375, max: 5, perLevel: 2 },
   { id: 'sweetheart', name: '甜心', desc: '生命上限 +1（一次性，1 心制下等于生命翻倍）', base: 2250, max: 1 },
-  { id: 'bootsUpgrade', name: '弹跳鞋', desc: '解锁常驻二段跳（一次性）', base: 1800, max: 1 },
+  { id: 'bootsUpgrade', name: '弹跳鞋', desc: '每局可二段跳 3 次（买一次永久生效）', base: 1800, max: 1, charges: 3 },
   { id: 'reviveChance', name: '复活机会', desc: '每关可原地复活 1 次（一次性解锁）', base: 2250, max: 1 },
   { id: 'bond', name: '守护羁绊', desc: '男友酱换人 CD -6 秒/级（需先解锁男友酱）', base: 525, max: 5, perLevel: 6, requires: 'partner' },
 ];

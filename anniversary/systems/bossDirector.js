@@ -291,10 +291,11 @@ export class BossDirector {
     this.world.sandTarget = ph.sand ? 1 : 0;
     this.setState('waves');
     this.setupWave(-0.9);
-    this.hud.banner(TEXTS.phaseLabel + ' ' + (i + 1) + ' · ' + ph.name, ph.hint, 2.2);
+    // 阶段玩法说明要在开打前读得完：横幅加长，首次见的阶段再用顶部提示补一遍
+    this.hud.banner(TEXTS.phaseLabel + ' ' + (i + 1) + ' · ' + ph.name, ph.hint, 5);
     if (!this.flags['tip' + i] && fromWave === 0) {
       this.flags['tip' + i] = true;
-      this.hud.tip(ph.hint, 3.2);
+      this.hud.tip(ph.hint, 6.5);
     }
   }
 

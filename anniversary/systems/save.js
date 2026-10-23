@@ -11,7 +11,7 @@ const KEY = 'benxiangni.save';
 export const SAVE_VERSION = 3;
 
 function defaultLevelRecord() {
-  return { cleared: false, clears: 0, plays: 0, bestCoins: 0, bestPerfects: 0, stars: [false, false, false], photos: [false, false, false] };
+  return { cleared: false, clears: 0, plays: 0, bestCoins: 0, bestPerfects: 0, stars: [false, false, false], photos: [false, false, false], bossSeen: false };
 }
 
 /** 版本迁移表：MIGRATIONS[n] 负责把 n-1 版升级到 n 版（以后改结构时在这里加） */

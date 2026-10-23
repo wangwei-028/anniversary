@@ -77,21 +77,32 @@ export class PlayScene {
     append(
       btns,
       button(g, TEXTS.resume, 'big', () => this.resume()),
-      button(g, TEXTS.restart, 'ghost', () => {
-        this.game.audio.resume();
-        this.bankCoins();
-        this.restart();
-      }),
-      button(g, TEXTS.quit, 'ghost', () => {
-        this.game.audio.resume();
-        this.bankCoins();
-        g.switchScene('select');
-      }),
+      button(g, TEXTS.restart, 'ghost', () => this.menuRestart()),
+      button(g, TEXTS.quit, 'ghost', () => this.menuQuit()),
     );
-    append(panel, el('h2', null, TEXTS.pauseTitle), el('p', null, this.session.level.name + ' · 金币 ' + this.session.coins + '（中途退出也会入账）'), btns, el('div', 'hint-keys', TEXTS.pauseKeys));
+    append(panel, el('h2', null, TEXTS.pauseTitle), el('p', null, this.pauseInfo()), btns, el('div', 'hint-keys', TEXTS.pauseKeys));
     append(wrap, dim, panel);
     this.root.appendChild(wrap);
     this.modal = wrap;
+  }
+
+  /** 暂停菜单里的状态行（子场景可覆盖） */
+  pauseInfo() {
+    return this.session.level.name + ' · 金币 ' + this.session.coins + '（中途退出也会入账）';
+  }
+
+  /** 暂停菜单"重新开始"（子场景可覆盖）：重开本关跑酷段 */
+  menuRestart() {
+    this.game.audio.resume();
+    this.bankCoins();
+    this.restart();
+  }
+
+  /** 暂停菜单"退出"（子场景可覆盖）：回选关 */
+  menuQuit() {
+    this.game.audio.resume();
+    this.bankCoins();
+    this.game.switchScene('select');
   }
 
   resume() {
