@@ -48,6 +48,9 @@ export class Input {
     this.anyPressed = false; // 菜单用：任意键 / 点击
     this.debugHandler = null; // 调试快捷键回调
     this.gestureEnabled = true;
+    // 由场景设置：true 时"点击"在按下的瞬间就触发 counter（Boss 硬直窗口的反击判定只有零点几秒，
+    // 等松手会多吃一次按压时长的延迟，按得稍久还会被当成"长按"把这次点击整个丢掉）
+    this.tapImmediate = false;
 
     // 当前触点
     this.pointerId = -1;
@@ -103,6 +106,7 @@ export class Input {
     this.count = 0;
     this.confirmPressed = false;
     this.anyPressed = false;
+    this.tapImmediate = false;
   }
 
   consumeConfirm() {
@@ -141,6 +145,18 @@ export class Input {
     this.startY = this.originY = e.clientY;
     this.startTime = performance.now() / 1000;
     this.fired = false;
+    // 反击窗口内（tapImmediate）：按下立即生效，此次按压就此消费掉，不再触发滑动 / 松手点击。
+    // 双击出技能的判定同样挪到按下时刻，连点两下就是"反击 + 闪光"
+    if (this.tapImmediate && this.gestureEnabled) {
+      this.fired = true;
+      if (this.startTime - this.lastTapTime <= TOUCH.doubleTapTime) {
+        this.lastTapTime = -9;
+        this.push(ACTION.SKILL);
+      } else {
+        this.lastTapTime = this.startTime;
+        this.push(ACTION.COUNTER);
+      }
+    }
   }
 
   onPointerMove(e) {

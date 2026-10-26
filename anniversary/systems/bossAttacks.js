@@ -405,7 +405,8 @@ export const ATTACKS = {
     },
   },
 
-  /** 记忆洪流（终结技）：三道连环红圈滚动推进，唯一空档匀速移动 → 全程跟档连续换道 */
+  /** 记忆洪流（终结技）：成对投掷物（红圈）与成对占道墙（红道线）逐拍交替，唯一空档匀速移动 → 跟档连续换道。
+   *  两种预警隔拍出现（同种间隔 = 2×beat），红圈不再前后重叠盖满三条道 */
   flood: {
     fire(d, spec, sp) {
       const c = d.data.bullets.flood;
@@ -413,8 +414,15 @@ export const ATTACKS = {
       if (sp) sp.seq++;
       let free = Math.floor(Math.random() * 3) - 1;
       const dir = Math.random() < 0.5 ? 1 : -1;
+      // 墙也校正到与投掷物同一节拍网格上到达（i*beat + 投掷物飞行时间），操作密度和纯投掷版完全一致
+      const T = lobT(d, d.data.bullets.lob || LOB_DEFAULT);
+      const travelW = (d.data.z - 1) / (c.wallSpeed * m);
       for (let i = 0; i < c.count; i++) {
-        for (let l = -1; l <= 1; l++) if (l !== free) d.schedule(i * c.beat, 'lobAt', l, 1, m, c.sprite);
+        for (let l = -1; l <= 1; l++) {
+          if (l === free) continue;
+          if (i % 2 === 0) d.schedule(i * c.beat, 'lobAt', l, 1, m, c.sprite);
+          else d.schedule(Math.max(0, i * c.beat + T - travelW), 'floodWall', l, 1, m, '');
+        }
         free += dir;
         if (free > 1) free = -1;
         else if (free < -1) free = 1;
@@ -423,7 +431,7 @@ export const ATTACKS = {
     },
     threat(d) {
       const c = d.data.bullets.flood;
-      const T = lobT(d, LOB_DEFAULT);
+      const T = lobT(d, d.data.bullets.lob || LOB_DEFAULT);
       return [T - 0.2, T + (c.count - 1) * c.beat + 0.2];
     },
   },
@@ -579,5 +587,25 @@ export const PENDING = {
       h.x0 = (p.key === 'L' ? -1 : 1) * LANE_W * 1.2;
       h.y0 = 2.4;
     }
+  },
+
+  /** 记忆洪流的占道墙（成对出现，只留一条空道；全高跳不过，只能跟着空档变道） */
+  floodWall(d, p) {
+    const c = d.data.bullets.flood;
+    const travel = (d.data.z - 1) / (c.wallSpeed * p.speedMul);
+    const h = d.world.spawnBullet('chainBlock', 'full');
+    h.sprite = 'ribbon';
+    h.draw = 'center';
+    h.fps = 10;
+    h.anim = true;
+    h.lane = p.lane;
+    h.x = p.lane * LANE_W;
+    h.halfW = LANE_W / 2 - 0.3;
+    h.z = d.data.z - 1;
+    h.len = 1.2;
+    h.height = 2.2;
+    h.vz = c.wallSpeed * p.speedMul;
+    d.world.laneWarn[p.lane + 1] = travel + 0.15;
+    d.audio.play('tock', 1.15);
   },
 };

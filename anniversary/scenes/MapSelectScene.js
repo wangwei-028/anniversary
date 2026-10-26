@@ -144,11 +144,10 @@ export class MapSelectScene {
     const g = this.game;
     const ul = el('ul');
     for (const t of [
-      '7 只 Boss 按登场顺序连战，吞吞压轴（约 9 分钟，每个阶段直接从第 2 波打起）',
-      '全程共享 2 颗心；两场之间的星光补给段最多回 1 颗',
-      '以【疯狂】难度为底再加压：弹幕更快、更密、波与波几乎不停，每打败一只下一只更密',
-      '单场无伤击败 → 立刻回 1 心',
-      '失败从当前这只 Boss 重开，不限次数，金币不损失',
+      '7 只 Boss 连战，吞吞压轴；每个阶段从第 2 波打起',
+      '全程共享 2 颗心；星光补给段最多回 1 颗，单场无伤立刻回 1 颗',
+      '以【疯狂】难度再加压：越往后弹幕越快越密',
+      '失败即结束（金币照常全额入账）',
     ])
       ul.appendChild(el('li', null, t));
     const row = el('div', 'row');
@@ -161,8 +160,8 @@ export class MapSelectScene {
       el('h2', null, '★ ' + RUSH_LEVEL.name),
       el('div', 'memo', '给全收集完成者的终极邀请函'),
       ul,
-      el('div', 'memo small', '通关奖励：群星之夜动画 · 白金奖章「年度最佳搭档」 · 专属皮肤「星光礼服」'),
-      el('div', 'memo small', 'Boss Rush 不提供难度切换（甜蜜难度玩家自动改用热恋参数 -10%）'),
+      el('div', 'memo small', '通关奖励：群星之夜动画 · 白金奖章 · 专属皮肤「星光礼服」'),
+      el('div', 'memo small', '不提供难度切换（甜蜜难度自动改用热恋参数 -10%）'),
       row,
     ]);
   }
@@ -238,11 +237,11 @@ export class MapSelectScene {
     const ul = el('ul');
     for (const id of lv.introObstacles || []) {
       const o = OBSTACLES[id];
-      ul.appendChild(el('li', null, o.name + '（' + o.category + '）· ' + o.tip.replace(/\s+/g, ' ')));
+      ul.appendChild(el('li', null, o.name + '：' + o.tip.replace(/\s+/g, ' ')));
     }
     if (lv.mechanic) ul.appendChild(el('li', null, lv.mechanic));
     const rec = save.data.levels[String(lv.id)];
-    const best = rec ? '最佳：金币 ' + rec.bestCoins + ' · 完美闪避 ' + rec.bestPerfects : '第一次来这里哦';
+    const best = rec ? ' · 最佳：金币 ' + rec.bestCoins + ' · 完美 ' + rec.bestPerfects : '';
 
     // 难度选择（8.5）
     const diffRow = el('div', 'chip-row');
@@ -300,7 +299,7 @@ export class MapSelectScene {
     append(
       panel,
       el('h2', null, '第 ' + lv.id + ' 关 · ' + lv.name),
-      el('div', 'memo', lv.memory + ' · ' + best),
+      el('div', 'memo', lv.memory + best),
       el('h3', null, TEXTS.newObstacles),
       ul,
       el('h3', null, TEXTS.bossPreview),

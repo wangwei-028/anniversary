@@ -167,10 +167,12 @@ export class CorridorRenderer {
     const colTex = this.colTex;
     const colVA = this.colVA;
     const colVB = this.colVB;
-    const warnOn = (Math.floor(time * 7) & 1) === 0;
-    const w0 = laneWarn[0] > 0;
-    const w1 = laneWarn[1] > 0;
-    const w2 = laneWarn[2] > 0;
+    // 车道警戒只显示倒计时的最后 0.8s（慢闪约 2 次）：显示太久会让前后两拨障碍的警戒线连成一片读不清。
+    // 障碍物本体 + 红色描边早就可见，警戒线只是临近时的强调
+    const warnOn = (Math.floor(time * 2.5) & 1) === 0;
+    const w0 = laneWarn[0] > 0 && laneWarn[0] <= 0.8;
+    const w1 = laneWarn[1] > 0 && laneWarn[1] <= 0.8;
+    const w2 = laneWarn[2] > 0 && laneWarn[2] <= 0.8;
     const anyWarn = w0 || w1 || w2;
 
     // ---- 每列：墙面求交 ----

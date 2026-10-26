@@ -95,8 +95,8 @@ export const LEVELS = [
     env: { ceiling: true, wallHeight: 12, floor: 'tiles', decorX: 5.5, decorY: 3.6 },
     // 关卡准备页展示的新障碍说明
     introObstacles: ['cart', 'banner', 'planter', 'tourists', 'giftRain'],
-    mechanic: '专属机制 · 扶梯：上扶梯加速、镜头抬高；下扶梯减速',
-    counterHint: '礼盒套上金圈的瞬间按 J / 点屏幕，把它拍回去砸喵喵的脸！',
+    mechanic: '扶梯：上扶梯加速、下扶梯减速',
+    counterHint: '礼盒金圈亮起的瞬间按 J / 点屏幕拍回去！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'planter' },
       { type: 'skill', from: 'wave2', streak: 2 },
@@ -246,8 +246,8 @@ export const LEVELS = [
     bossMusic: 'boss',
     env: { ceiling: false, wallHeight: 5, floor: 'path', decorX: 5.4, decorY: 0 },
     introObstacles: ['animalCart', 'zooSign', 'peacockCar', 'penguins', 'banana'],
-    mechanic: '专属机制 · 打滑便便：踩到后 0.8 秒左右颠倒（不扣心），跳过去就没事',
-    counterHint: '金刚累了会扔金色滚桶 → 跳上去弹起来，一脚踩它的头！',
+    mechanic: '打滑便便：踩到会左右颠倒（不扣心），跳过去就没事',
+    counterHint: '跳上金色滚桶弹起来，踩金刚的头！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'peacockCar' },
       { type: 'skill', from: 'wave2', streak: 2 },
@@ -373,8 +373,8 @@ export const LEVELS = [
     bossMusic: 'boss',
     env: { ceiling: false, wallHeight: 16, floor: 'asphalt', decorX: 5.0, decorY: 4.2 },
     introObstacles: ['busStop', 'newsstand', 'rickshaw', 'neonSign', 'gate'],
-    mechanic: '专属机制 · 霓虹夜雨：中段开始下雨、霓虹灯闪烁（只是视觉，判定不变）；回忆道具 = Boss 战的备用弹药',
-    counterHint: '捡起波哥掉的菠萝油，指针摆进红区时按 J / 点屏幕扔回去！',
+    mechanic: '霓虹夜雨只是视觉，判定不变；回忆道具 = Boss 战备用弹药',
+    counterHint: '捡起菠萝油，指针进红区时按 J / 点屏幕扔回去！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'busStop' },
       { type: 'skill', from: 'wave2', streak: 2 },
@@ -585,8 +585,8 @@ const LEVELS_M3 = {
     bossMusic: 'boss',
     env: { ceiling: false, wallHeight: 9, floor: 'tiles', decorX: 5.4, decorY: 0 },
     introObstacles: ['balloons', 'teacup', 'ferrisBeam', 'ribbon'],
-    mechanic: '专属机制 · 弹床连跳：进入弹床区后每次落地都会被高高弹起，在空中接金币、调整落点',
-    counterHint: '木木转晕跪地后，站到绿箭头那条道，连按两次方向键（或按 J / 点屏幕）冲刺撞它！',
+    mechanic: '弹床区：每次落地都会被高高弹起，空中接金币、调落点',
+    counterHint: '木木跪地后：站上绿箭头那条道，连按两次方向键（或按 J / 点屏幕）冲刺！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'ferrisPillar' },
       { type: 'skill', from: 'wave2', streak: 2 },
@@ -699,8 +699,8 @@ const LEVELS_M3 = {
     bossMusic: 'boss',
     env: { ceiling: false, wallHeight: 7, floor: 'asphalt', decorX: 5.2, decorY: 3.4 },
     introObstacles: ['snackCart', 'stools', 'lanterns', 'skewers', 'crowd', 'hawker'],
-    mechanic: '专属机制 · 摊位喇叭：听到"叫卖"声、看到路边气泡 → 马上会有人从路边冲出来横穿',
-    counterHint: '金光巨章鱼烧：金圈时刻按 J / 点屏幕拍回去，再按 ← ↑ → 选落点，砸中章章站的那条道！',
+    mechanic: '摊位喇叭：听到"叫卖"声 → 马上会有人冲出来横穿',
+    counterHint: '金圈时刻按 J / 点屏幕拍回去，再按 ← ↑ → 选落点砸它！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'snackCart' },
       { type: 'skill', from: 'wave2', streak: 2 },
@@ -810,8 +810,8 @@ const LEVELS_M3 = {
     bossMusic: 'boss',
     env: { ceiling: false, wallHeight: 4.5, floor: 'path', decorX: 5.0, decorY: 0 },
     introObstacles: ['beachChair', 'surfRack', 'reef', 'jelly', 'tide'],
-    mechanic: '专属机制 · 潮汐涨落：屏幕两侧泛蓝 = 要涨潮，两边的道会被淹没，站中间；潮退后两边铺满金币',
-    counterHint: '蟹老板壳张开时会推来金色跳板 → 踩上去跳起来，踩它壳里发光的弱点！',
+    mechanic: '潮汐：屏幕两侧泛蓝 = 要涨潮，两边道会被淹，站中间；潮退后两边铺金币',
+    counterHint: '踩上金色跳板跳起来，踩它壳里发光的弱点！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'reef' },
       { type: 'skill', from: 'wave2', streak: 2 },
@@ -925,8 +925,8 @@ const LEVELS_M3 = {
     rainTip: '下雨了，快点跑回家~',
     env: { ceiling: false, wallHeight: 10, floor: 'asphalt', decorX: 5.3, decorY: 0 },
     introObstacles: ['mailbox', 'trashBins', 'cart', 'banner', 'busStop', 'stools', 'ribbon', 'jelly'],
-    mechanic: '回家的路：前 6 关的障碍（弱化版）都会回来；中段是「回忆走廊」——两侧挂满我们的照片，放慢 10 秒',
-    counterHint: '吞吞每个阶段疲劳后会随机考你一种还击：完美反击 / 踩跳 / 投掷 / 冲刺，这一年学会的本事都用上！',
+    mechanic: '回家的路：前 6 关的障碍都会回来；中段「回忆走廊」放慢 10 秒',
+    counterHint: '吞吞每个阶段随机考一种还击（完美反击 / 踩跳 / 投掷 / 冲刺），看提示操作！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'mailbox' },
       { type: 'skill', from: 'wave2', streak: 2 },

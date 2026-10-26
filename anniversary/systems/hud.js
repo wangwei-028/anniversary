@@ -97,6 +97,11 @@ export class Hud {
     this.tipDur = 0;
   }
 
+  /** 横幅 / 提示是否还在播放（Boss 登场要等它们放完，别让教学字被 Boss 演出顶掉） */
+  busy() {
+    return this.bannerT < this.bannerDur || this.tipT < this.tipDur;
+  }
+
   /** 屏幕中央的大号提示（如 Boss 战的"反击时机！"） */
   center(text, dur = 1.2) {
     this.centerText = text;

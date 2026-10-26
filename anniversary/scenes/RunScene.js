@@ -70,12 +70,12 @@ export class RunScene extends PlayScene {
         this.transT = 0;
       }
     } else if (this.state === 'toBoss') {
-      // Boss 登场前：速度锁定到 12 m/s，等场上障碍跑完
+      // Boss 登场前：速度锁定到 12 m/s，等场上障碍跑完、提示词也放完（否则教学字还挂着 Boss 就压过来了）
       w.targetSpeed = SPEED.boss;
       this.transT += dt;
       if (s.level.finale) {
         // 最终关：跑到家门口，门被撞开 → 最终 Boss 登场
-        if (!this.door && this.transT > 0.6 && !this.hazardsAhead()) this.door = w.spawnDecor(SPRITES.homeDoor, 0, 0, 40);
+        if (!this.door && this.transT > 0.6 && !this.hazardsAhead() && !w.hud.busy()) this.door = w.spawnDecor(SPRITES.homeDoor, 0, 0, 40);
         if (this.door && this.door.z < 7) {
           w.flashWhite = 0.8;
           w.camera.shake(4);
@@ -84,7 +84,7 @@ export class RunScene extends PlayScene {
           g.switchScene('boss', { session: s });
           return;
         }
-      } else if (this.transT > 0.6 && !this.hazardsAhead()) {
+      } else if (this.transT > 0.6 && !this.hazardsAhead() && !w.hud.busy()) {
         g.switchScene('boss', { session: s });
         return;
       }

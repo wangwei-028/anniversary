@@ -134,6 +134,7 @@ export class BossRushScene extends PlayScene {
 
   update(dtReal) {
     const w = this.world;
+    this.updateTapImmediate();
     this.handleInput();
     if (this.paused) return;
     const dt = w.step(dtReal);
@@ -147,6 +148,19 @@ export class BossRushScene extends PlayScene {
     w.update(dt);
     w.hud.update(dtReal);
     if (this.state === 'dying') this.updateDying(dtReal);
+  }
+
+  /** 同 BossScene：完美反击 / 投掷出手的瞬间让点击零延迟生效 */
+  updateTapImmediate() {
+    const d = this.director;
+    const c = d && d.counter;
+    this.game.input.tapImmediate =
+      this.state === 'play' &&
+      this.phase === 'fight' &&
+      !!c &&
+      d.state === 'stun' &&
+      !d.dashArmed &&
+      (c.type === 'reflect' || (c.type === 'throw' && d.bar.active));
   }
 
   acceptInput() {

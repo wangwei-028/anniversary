@@ -37,7 +37,7 @@ export const BOSSES = {
       {
         // 教学：盲盒(跳) / 气球幕墙(铲) / 购物车(站空道)
         name: '开工彩排',
-        hint: '盲盒落地炸彩纸 → 跳！气球墙压过来 → 滑铲钻过去！',
+        hint: '盲盒 → 跳！气球墙 → 滑铲！',
         expression: 'normal',
         waves: [
           { spawns: [{ type: 'blindBox', every: 2.2, offset: 0.4, lane: 'player', fan: 1 }] },
@@ -53,7 +53,7 @@ export const BOSSES = {
       {
         // 组合技：红毯迎宾（站空道+铲）/ 地毯变奏（跳→铲→跳节拍链）
         name: '红毯迎宾',
-        hint: '红道 + 彩带横梁一起来：站进空道，马上低头滑铲！',
+        hint: '红道站空道，横梁马上滑铲！',
         expression: 'angry',
         waves: [
           {
@@ -85,7 +85,7 @@ export const BOSSES = {
       {
         // 考核：券墙高低交替 + 双盒错落 + 组合提速
         name: '促销风暴',
-        hint: '低空券跳、高空券铲；两个盲盒错着落 → 连跳或者一次换道躲两发！',
+        hint: '低券跳、高券铲；双盲盒连跳或换道！',
         expression: 'angry',
         waves: [
           {
@@ -115,9 +115,9 @@ export const BOSSES = {
       bullet: 'giantGift',
       firstDelay: 1.0, // 进入硬直窗口后多久丢第一个
       interval: 1.5, // 没拍中时，再丢下一个的间隔
-      hitWindow: 0.18, // 礼盒到达前的"金圈"判定窗口（秒）
+      hitWindow: 0.3, // 礼盒到达前的"金圈"判定窗口（秒）——触屏点击有固有延迟，窗口要足够宽
       returnTime: 0.5, // 拍回去飞行时间
-      hint: '礼盒飞来 → 套上金圈的瞬间按 J / 点屏幕，拍回去！',
+      hint: '金圈亮起的瞬间按 J / 点屏幕，拍回去！',
       hintAgain: '拍早了！等金圈亮起再按！',
       hintBonk: '被砸懵了也不扣心，再来！',
     },
@@ -175,7 +175,7 @@ export const BOSSES = {
       {
         // 教学：滚桶(跳) / 藤蔓双荡(低荡跳、高荡铲 + 跟着让道)
         name: '热身荡跃',
-        hint: '滚桶 → 跳！藤蔓影子逐道扫过来：低荡跳、高荡铲，还要跟着让道！',
+        hint: '滚桶 → 跳！藤蔓低荡跳、高荡铲！',
         expression: 'normal',
         waves: [
           { spawns: [{ type: 'barrel', every: 1.9, offset: 0.4, lane: 'player' }] },
@@ -191,7 +191,7 @@ export const BOSSES = {
       {
         // 组合技：困兽之斗（塌陷锁道 + 桶打剩下两道）/ 荡+桶（影子扫完的道紧接着来桶）
         name: '困兽之斗',
-        hint: '跑道塌了！只剩两条道，滚桶专打这两条 → 没地方躲就跳！',
+        hint: '跑道塌了只剩两道：滚桶只能跳！',
         expression: 'angry',
         waves: [
           {
@@ -216,7 +216,7 @@ export const BOSSES = {
       {
         // 考核：连续双荡 + 绝地跳板（跳板道在坑对面）
         name: '疯狂马戏',
-        hint: '藤蔓越荡越快！香蕉地毯来了 → 抢到跳板道飞过去！',
+        hint: '香蕉地毯 → 抢跳板道飞过去！',
         expression: 'angry',
         waves: [
           {
@@ -246,7 +246,7 @@ export const BOSSES = {
       name: '踩跳',
       firstDelay: 1.0,
       interval: 1.4,
-      hint: '金色滚桶滚过来了 → 跳上去弹起来，踩金刚的头！',
+      hint: '跳上金色滚桶，踩金刚的头！',
       hintAgain: '跳到金色滚桶上面！',
       hintBonk: '被桶撞了也不扣心，再来！',
       dashTime: 0.45, // 被踩前金刚冲到脚下的时间
@@ -282,7 +282,7 @@ export const BOSSES = {
       {
         // 教学：奶茶(站空道) / 餐盘链(按节拍跳/铲)
         name: '开档',
-        hint: '奶茶留一个空档 → 站过去！餐盘一排排来：低的跳、吊着的铲！',
+        hint: '奶茶 → 站空道！餐盘低跳高铲！',
         expression: 'normal',
         waves: [
           { spawns: [{ type: 'milkTea', every: 2.2, offset: 0.4 }] },
@@ -298,7 +298,7 @@ export const BOSSES = {
       {
         // 组合技：鸳鸯双拼（奶茶占两道 + 全场地波 → 站空道+跳）/ 加料奶茶（餐盘链中途插红道）
         name: '鸳鸯双拼',
-        hint: '奶茶 + 地波一起来：站进空道，原地跳过去！',
+        hint: '站进空道，原地跳过地波！',
         expression: 'angry',
         waves: [
           { spawns: [{ combo: [{ type: 'milkTea' }, { type: 'wokWave' }], every: 3.0, offset: 0.5 }] },
@@ -318,7 +318,7 @@ export const BOSSES = {
       {
         // 考核：6 连餐盘链 + 三连地波 + 双拼
         name: '打烊冲刺',
-        hint: '餐盘六连发，跟着节拍跳、铲！三连红圈 + 地波一起来！',
+        hint: '餐盘跟节拍跳铲！红圈 + 地波一起躲！',
         expression: 'angry',
         waves: [
           { spawns: [{ type: 'band', bullet: 'trayWall', sequence: ['low', 'high', 'low', 'high', 'low', 'high'], every: 1.25, offset: 0.4 }] },
@@ -338,12 +338,12 @@ export const BOSSES = {
       name: '投掷',
       firstDelay: 0.6,
       interval: 1.6,
-      hint: '捡起发光的菠萝油 → 指针摆进红区时按 J / 点屏幕扔回去！',
+      hint: '捡起菠萝油，指针进红区按 J / 点屏幕扔回去！',
       hintAmmo: '有回忆道具！按 J / 点屏幕直接开始投掷',
       hintMiss: '扔偏了！再捡一个试试',
-      barPeriod: 1.3, // 指针来回一次的时间
-      zoneStart: 0.66, // 红区位置（0~1）
-      zoneWidth: 0.2,
+      barPeriod: 1.6, // 指针来回一次的时间（放慢一点，红区停留更久）
+      zoneStart: 0.6, // 红区位置（0~1）
+      zoneWidth: 0.26, // 红区宽度（触屏点击有延迟，判定从宽）
       barTimeout: 4, // 一直不按会自动扔出（大概率扔偏）
       returnTime: 0.5,
     },
@@ -375,7 +375,7 @@ export const BOSSES = {
       {
         // 教学：木马环绕(站空档) / 摩天轮(两道宽巨梁，安全道换一次)
         name: '木马归位',
-        hint: '木马转圈冲来 → 看红道！摩天轮占两道滚来，第二根会换道！',
+        hint: '木马 → 看红道！摩天轮第二根会换道！',
         expression: 'normal',
         waves: [
           { spawns: [{ type: 'horses', every: 2.2, offset: 0.4 }] },
@@ -391,7 +391,7 @@ export const BOSSES = {
       {
         // 组合技：追逐链(安全道漂移，连续换道) + 链上开花(链中途全宽地波 → 跟链同时跳)
         name: '安全漂移',
-        hint: '红道像波浪一样换位置 → 跟着安全道连续变道！地波来了就原地跳！',
+        hint: '跟着安全道连续变道！地波原地跳！',
         expression: 'angry',
         waves: [
           { spawns: [{ type: 'chaseChain', every: 3.8, offset: 0.5 }] },
@@ -407,7 +407,7 @@ export const BOSSES = {
       {
         // 考核：极速追逐(中途反向) + 轮马双读
         name: '极速旋转',
-        hint: '追逐链会中途反向！摩天轮 + 木马同时来，两个都要看！',
+        hint: '追逐链会中途反向！轮 + 马同时要看！',
         expression: 'angry',
         waves: [
           { spawns: [{ type: 'chaseChain', every: 3.4, offset: 0.4, reverse: true }] },
@@ -429,7 +429,7 @@ export const BOSSES = {
       interval: 1.0,
       kneelZ: 8, // 跪在前方多远
       dashTime: 0.3,
-      hint: '木木转晕跪地了！走到绿箭头那条道，连按两次方向键（或按 J / 点屏幕）冲刺撞它！',
+      hint: '站上绿箭头那条道，连按两次方向键（或按 J / 点屏幕）冲刺撞它！',
       hintAgain: '先站到绿箭头那条道上，再连按两次！',
       hintBonk: '',
     },
@@ -463,7 +463,7 @@ export const BOSSES = {
       {
         // 教学：弹珠(预判弹道) / 木鱼三连(节拍跳)
         name: '弹珠开场',
-        hint: '章鱼烧落地会弹到旁边的道 → 跟着红圈连躲！木鱼三连 → 跟节拍跳！',
+        hint: '章鱼烧落地会弹道，跟着红圈连躲！',
         expression: 'normal',
         waves: [
           { spawns: [{ type: 'ballBounce', every: 2.4, offset: 0.4 }] },
@@ -479,7 +479,7 @@ export const BOSSES = {
       {
         // 组合技：触手封锁(一条道被按住) + 弹珠只在两道间弹 / 窄巷节拍
         name: '瓮中之鳖',
-        hint: '触手按住一条道！弹珠和地波只打剩下两条 → 空间变小了！',
+        hint: '触手按住一道，只剩两条可走！',
         expression: 'angry',
         waves: [
           {
@@ -505,7 +505,7 @@ export const BOSSES = {
       {
         // 考核：双手连抛(节奏红圈) + 双节奏 + 封锁常驻
         name: '章鱼烧暴雨',
-        hint: '双手连抛追着你，地波又来 → 两组节拍错着半拍，都接住！',
+        hint: '双手连抛 + 地波，两组节拍都接住！',
         expression: 'angry',
         waves: [
           {
@@ -538,10 +538,10 @@ export const BOSSES = {
       bullet: 'giantTako',
       firstDelay: 0.8,
       interval: 1.4,
-      hitWindow: 0.18,
+      hitWindow: 0.3,
       returnTime: 0.55,
       aimTime: 0.65, // 选落点的时间（慢动作中，约 2 秒）
-      hint: '金光巨章鱼烧来了！金圈时刻按 J / 点屏幕拍回去，再选落点砸章章！',
+      hint: '金圈亮起按 J / 点屏幕拍回去，再选落点砸章章！',
       hintAim: '选落点！章章在哪条道就按哪边：← 左 / ↑ 中 / → 右',
       hintMissAim: '砸偏了！看准章章站在哪条道',
       hintAgain: '拍早了！等金圈亮起再按！',
@@ -579,7 +579,7 @@ export const BOSSES = {
       {
         // 教学：泡泡合拢 / 巨钳横扫
         name: '潮起',
-        hint: '泡泡合拢 → 站安全的那侧！巨钳贴地扫全场 → 跳！',
+        hint: '泡泡 → 站空侧！巨钳 → 跳！',
         expression: 'normal',
         waves: [
           { spawns: [{ type: 'bubbles', every: 2.2, offset: 0.4, sequence: ['center', 'sides'] }] },
@@ -595,7 +595,7 @@ export const BOSSES = {
       {
         // 组合技：沙墙推进(慢墙带洞，洞里还有坎) / 墙后偷袭(等墙时巨钳到 → 洞道内原地跳)
         name: '沙墙推进',
-        hint: '沙墙只有一个洞（金光那道）→ 提前站过去，到洞里还要跳一下过沙坎！',
+        hint: '提前站进金光洞道，洞里还要跳一下！',
         expression: 'angry',
         waves: [
           { spawns: [{ type: 'sandWall', every: 4.6, offset: 0.5 }] },
@@ -612,7 +612,7 @@ export const BOSSES = {
         // 考核：风沙视野 + 墙钳连环 + 双钳快拍
         name: '沙暴怒涛',
         sand: true, // 风沙遮挡视野（纯视觉）
-        hint: '风沙来了！视野变差但判定不变 → 盯住金光的洞道和钳子！',
+        hint: '风沙只是遮挡，盯住金光洞道和钳子！',
         expression: 'angry',
         waves: [
           {
@@ -641,7 +641,7 @@ export const BOSSES = {
       interval: 1.4,
       springAir: 1.1,
       dashTime: 0.5,
-      hint: '蟹老板壳张开了！踩上金色跳板跳起来，踩它壳里发光的弱点！',
+      hint: '踩上金色跳板，踩它壳里发光的弱点！',
       hintAgain: '没踩到跳板！站到跳板那条道',
       hintBonk: '',
     },
@@ -676,7 +676,7 @@ export const BOSSES = {
       {
         // 混合考卷 · 上半场：商场 & 动物园的招牌机制组合
         name: '回忆 · 商场 & 动物园',
-        hint: '它在模仿喵喵和金刚！气球墙要铲、藤蔓要跟、红毯迎宾一起来！',
+        hint: '气球墙 → 铲！藤蔓 → 跟着让道跳！',
         expression: 'normal',
         waves: [
           {
@@ -699,7 +699,7 @@ export const BOSSES = {
       {
         // 混合考卷 · 下半场：游乐园 & 夜市 & 海边的招牌机制 + 遗忘之墨
         name: '回忆 · 游乐园 & 夜市 & 海边',
-        hint: '追逐链、触手、沙墙全来了！墨水泼到会左右颠倒，稳住！',
+        hint: '追逐链、触手、沙墙！墨水会左右颠倒！',
         expression: 'angry',
         waves: [
           { spawns: [{ combo: [{ type: 'chaseChain' }, { type: 'beatWave', delay: 1.3 }], every: 4.2, offset: 0.5 }] },
@@ -719,9 +719,9 @@ export const BOSSES = {
         ],
       },
       {
-        // 终局：记忆洪流（三道连环红圈，空档匀速移动）+ 各机制收尾
+        // 终局：记忆洪流（成对红圈投掷与成对占道墙交替，空档匀速移动）+ 各机制收尾
         name: '记忆洪流',
-        hint: '终极考验！红圈滚着推进，唯一空档一直在走 → 跟上它！',
+        hint: '红圈与高墙交替推进，唯一空档一直在走 → 跟上它！',
         expression: 'angry',
         waves: [
           {
@@ -751,9 +751,9 @@ export const BOSSES = {
           bullet: 'giantGift',
           firstDelay: 0.8,
           interval: 1.5,
-          hitWindow: 0.18,
+          hitWindow: 0.3,
           returnTime: 0.5,
-          hint: '这次是完美反击！礼盒套上金圈的瞬间按 J / 点屏幕拍回去！',
+          hint: '这次是完美反击！金圈亮起的瞬间按 J / 点屏幕拍回去！',
           hintAgain: '拍早了！等金圈亮起再按！',
           hintBonk: '被砸懵了也不扣心，再来！',
         },
@@ -772,9 +772,9 @@ export const BOSSES = {
           name: '投掷',
           firstDelay: 0.6,
           interval: 1.6,
-          barPeriod: 1.3,
-          zoneStart: 0.66,
-          zoneWidth: 0.2,
+          barPeriod: 1.6,
+          zoneStart: 0.6,
+          zoneWidth: 0.26,
           barTimeout: 4,
           returnTime: 0.5,
           hint: '这次是投掷！捡起菠萝油，指针进红区按 J / 点屏幕！',
@@ -788,7 +788,7 @@ export const BOSSES = {
           interval: 1.0,
           kneelZ: 9,
           dashTime: 0.3,
-          hint: '这次是冲刺！站到绿箭头那条道，连按两次方向键（或按 J）冲过去！',
+          hint: '这次是冲刺！站上绿箭头那条道，连按两次方向键（或按 J）冲过去！',
           hintAgain: '先站到绿箭头那条道上，再连按两次！',
           hintBonk: '',
         },
@@ -807,7 +807,8 @@ export const BOSSES = {
       dualLob: { count: 5, interval: 0.55, sprite: 'takoBall' },
       sandWall: { speed: 5.5, length: 1.8, height: 3.4, ridgeLength: 1.0, ridgeHeight: 0.5 },
       beatWave: { speed: 11, height: 0.5, length: 0.6, beat: 0.75, count: 3 },
-      flood: { beat: 0.55, count: 8, sprite: 'takoBall' },
+      // 记忆洪流：wallSpeed = 占道墙的推进速度（墙与投掷物校正到同一节拍到达）
+      flood: { beat: 0.55, count: 8, sprite: 'takoBall', wallSpeed: 12 },
       lob: { flightTime: 0.95, arcHeight: 4.2 },
       giantGift: { speed: 11, height: 1.5, size: 1.7 },
     },

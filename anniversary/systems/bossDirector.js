@@ -17,7 +17,9 @@ import { ATTACKS, PENDING } from './bossAttacks.js';
  *       子攻击可用 delay 字段做成节拍链（如 跳 → 0.55s → 铲）。
  */
 const LANE_W = WORLD.laneWidth;
-const SEQUENCE_TYPES = new Set(['beatWave', 'bunTriple', 'ballBounce']);
+// 连击型攻击：一发会连续打一段时间，同种之间也要错开（否则前后两轮的节拍会穿插重叠成一团）。
+// flood（记忆洪流）尤其需要：它每轮横跨 count×beat 秒，密度加成后重发比一轮还短
+const SEQUENCE_TYPES = new Set(['beatWave', 'bunTriple', 'ballBounce', 'flood']);
 
 export class BossDirector {
   constructor(world, data, params, callbacks) {
@@ -902,8 +904,9 @@ export class BossDirector {
     const s = this.world.session;
     this.setState('stun');
     this.stunTime = this.params.stunWindow;
-    if (s.energy >= 0.999) {
-      // 技能满：提示可以放"回忆闪光"换更宽的反击判定（不再直接消耗能量加时）
+    if (s.energy >= 0.999 && !this.flags.skillTip) {
+      // 只在第一次硬直时提示，之后每次都弹会刷屏
+      this.flags.skillTip = true;
       this.hud.tip('技能满了！双击屏幕 / L 放闪光 → 本次反击更好命中！', 2.8);
     }
     if (this.data.counter.type === 'mixed') {
@@ -919,7 +922,12 @@ export class BossDirector {
     this.counterCd = 0;
     this.stunClock = 0;
     this.hud.center(TEXTS.bossStun, 1.3);
-    this.hud.tip(c.type === 'throw' && s.ammo > 0 ? c.hintAmmo : c.hint, 3.6);
+    // 还击说明只在"方式变化"时弹一次（混合型每阶段换一种），同一段话反复弹只会挡视线
+    const hintKey = this.data.counter.type === 'mixed' ? this.mixOrder[this.phaseIndex % this.mixOrder.length] : c.type;
+    if (this.flags.counterHint !== hintKey) {
+      this.flags.counterHint = hintKey;
+      this.hud.tip(c.type === 'throw' && s.ammo > 0 ? c.hintAmmo : c.hint, 3.6);
+    }
     this.audio.play('stun');
   }
 
@@ -1221,7 +1229,7 @@ export class BossDirector {
     bar.zoneStart = c.zoneStart;
     bar.zoneWidth = c.zoneWidth * (this.world.skillBoostT > 0 ? 1 + SKILL.throwZoneBonus : 1);
     bar.result = '';
-    this.hud.tip('指针进红区时按 J / 点屏幕！', 2.5);
+    // 出手说明由蓄力条上方的常驻文字承担（hud.renderThrowBar），不再另弹一条提示
   }
 
   updateBar(dt) {

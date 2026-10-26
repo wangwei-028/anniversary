@@ -55,6 +55,7 @@ export class BossScene extends PlayScene {
 
   update(dtReal) {
     const w = this.world;
+    this.updateTapImmediate();
     this.handleInput();
     if (this.paused) return;
     const dt = w.step(dtReal);
@@ -66,6 +67,22 @@ export class BossScene extends PlayScene {
     w.update(dt);
     w.hud.update(dtReal);
     if (this.state === 'dying') this.updateDying(dtReal);
+  }
+
+  /**
+   * 完美反击（金圈拍击）与投掷（红区出手）是"点屏幕"判定且窗口只有零点几秒：
+   * 这两种时刻让点击在按下瞬间生效，消除"等松手"的输入延迟。
+   * 冲刺 / 选落点 / 捡菠萝油还需要滑动变道，保持原来的松手判定。
+   */
+  updateTapImmediate() {
+    const d = this.director;
+    const c = d && d.counter;
+    this.game.input.tapImmediate =
+      this.state === 'play' &&
+      !!c &&
+      d.state === 'stun' &&
+      !d.dashArmed &&
+      (c.type === 'reflect' || (c.type === 'throw' && d.bar.active));
   }
 
   onDeathFinal() {
