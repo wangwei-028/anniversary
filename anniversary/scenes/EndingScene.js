@@ -6,7 +6,8 @@ import { SPRITES } from '../systems/sprites.js';
 /**
  * 第 7 关通关后的"回家"演出（约 10 秒）：
  * 吞吞吐出的回忆光点一颗颗飞回家 → 窗户一盏盏亮起来 → 两个人站在家门口 → 进入结算。
- * 点屏幕 / 按空格可以跳过（2 秒后）。
+ * 只能点右上角「跳过」按钮跳过（2 秒后才生效）：Boss 战要求连点屏幕反击，收尾的连点
+ * 惯性很容易误把整段演出跳掉，所以点屏幕 / 空格一律不响应。
  */
 const LINES = [
   { at: 0.3, text: '吞吞把这一年被吞掉的回忆，全都吐了出来……' },
@@ -33,9 +34,11 @@ export class EndingScene {
     g.audio.playMusic('theater');
     g.world.hidePlayer = true;
     const root = el('div', 'scene-root interactive');
-    root.addEventListener('click', () => this.skip());
-    const skip = button(g, '跳过', 'small ghost ending-skip', () => this.skip());
-    append(root, skip);
+    // 注意：不在 root 上监听 click——打 Boss 的连点惯性会顺带把演出跳掉，只留「跳过」按钮。
+    // 按钮前 2 秒隐藏（连点收不住的时候大概率正点在它身上），出现即可点。
+    this.skipBtn = button(g, '跳过', 'small ghost ending-skip', () => this.skip());
+    this.skipBtn.style.visibility = 'hidden';
+    append(root, this.skipBtn);
     g.ui.appendChild(root);
   }
 
@@ -56,10 +59,10 @@ export class EndingScene {
     const g = this.game;
     this.t += dt;
     while (g.input.next() !== null) {
-      /* 演出中不处理游戏动作 */
+      /* 演出中不处理游戏动作（空格 / 回车也不跳过——那是打 Boss 时的连按惯性键） */
     }
-    if (g.input.consumeConfirm()) this.skip();
     if (Math.random() < dt * 3) g.audio.play('sparkle', 0.8 + Math.random() * 0.6, 0.4);
+    if (this.t >= 2 && this.skipBtn) this.skipBtn.style.visibility = 'visible';
     if (this.t >= DURATION) this.finish();
   }
 
