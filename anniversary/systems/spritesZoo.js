@@ -66,13 +66,13 @@ function warnTri(a, cx, top) {
   a.set(cx, top + 6, INK);
 }
 
-/** "小心动物"横杆告示（滑铲钻过）：木牌 + 警告三角 + 爪印 */
+/** "小心动物"横杆告示（滑铲钻过）：木牌 + 警告三角 + 爪印。画布 36px，牌子吊在 ~1.5m 以上 */
 function drawZooSign(lanes) {
   const w = Math.round(lanes * 38.4) + 2;
-  const a = new PixelArt(w, 30);
+  const a = new PixelArt(w, 36);
   const pole = '#8a5a2b';
-  a.rect(1, 1, 2, 29, pole);
-  a.rect(w - 3, 1, 2, 29, pole);
+  a.rect(1, 1, 2, 35, pole);
+  a.rect(w - 3, 1, 2, 35, pole);
   a.rect(3, 1, w - 6, 12, '#e8b56a');
   for (let y = 4; y < 13; y += 4) a.rect(3, y, w - 6, 1, '#c98a4b');
   // 黄黑警戒边

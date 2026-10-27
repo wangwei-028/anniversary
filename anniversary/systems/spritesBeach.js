@@ -26,13 +26,13 @@ function drawBeachChair() {
   return a.toCanvas();
 }
 
-/** 冲浪板架（滑铲钻过）：横杆上挂着彩色冲浪板 */
+/** 冲浪板架（滑铲钻过）：横杆上挂着彩色冲浪板。画布 46px，板子吊在 ~1.7m 以上 */
 function drawSurfRack(lanes) {
   const w = Math.round(lanes * 38.4) + 2;
-  const a = new PixelArt(w, 40);
+  const a = new PixelArt(w, 46);
   const cols = ['#ff6f5f', '#ffd23f', '#5cc7e0', '#a77bff', '#5cc77a'];
-  a.rect(1, 2, 2, 38, '#c98a4b');
-  a.rect(w - 3, 2, 2, 38, '#c98a4b');
+  a.rect(1, 2, 2, 44, '#c98a4b');
+  a.rect(w - 3, 2, 2, 44, '#c98a4b');
   a.rect(1, 2, w - 2, 2, '#8a5a2b');
   let i = 0;
   for (let x = 6; x < w - 6; x += 7) {

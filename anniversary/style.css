@@ -177,6 +177,101 @@ body {
   transform: translateY(calc(var(--px) * 1));
 }
 
+/* ---------- 开发者调试（仅 devMode，标题画面左上角） ---------- */
+.dev-btn {
+  position: absolute;
+  top: calc(var(--px) * 4);
+  left: calc(var(--px) * 4);
+  z-index: 5;
+  padding: calc(var(--px) * 2) calc(var(--px) * 6);
+  font-family: var(--font);
+  font-size: calc(var(--px) * 8);
+  font-weight: 900;
+  color: var(--ink);
+  background: rgba(255, 246, 250, 0.7);
+  border: calc(var(--px) * 1) dashed var(--ink);
+  opacity: 0.6;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.dev-btn:hover {
+  opacity: 1;
+}
+
+.dev-menu .dev-item {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: calc(var(--px) * 3);
+  text-align: left;
+}
+
+.dev-menu .dev-note {
+  text-align: left;
+  opacity: 0.75;
+}
+
+/* 非开发者模式时右下角的隐蔽入口（输入开发者代码用） */
+.dev-secret {
+  position: absolute;
+  right: calc(var(--px) * 6);
+  bottom: calc(var(--px) * 5);
+  width: calc(var(--px) * 10);
+  height: calc(var(--px) * 10);
+  padding: 0;
+  font-size: calc(var(--px) * 10);
+  line-height: 1;
+  font-family: var(--font);
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  opacity: 0.25;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.dev-secret:hover {
+  opacity: 0.8;
+}
+
+/* 开发者代码输入 */
+.dev-code-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: calc(var(--px) * 4) 0 calc(var(--px) * 1);
+  padding: calc(var(--px) * 3) calc(var(--px) * 4);
+  font-family: var(--font);
+  font-size: calc(var(--px) * 10);
+  letter-spacing: calc(var(--px) * 2);
+  text-align: center;
+  color: var(--ink);
+  background: #fff;
+  border: calc(var(--px) * 1) solid var(--ink);
+  outline: none;
+}
+
+.dev-code-input:focus {
+  border-color: var(--pink-dark, #e0568f);
+}
+
+.dev-code-hint {
+  min-height: calc(var(--px) * 9);
+  color: #d2447a;
+}
+
+.dev-code.shake {
+  animation: dev-shake 0.35s;
+}
+
+@keyframes dev-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(calc(var(--px) * -3)); }
+  50% { transform: translateX(calc(var(--px) * 3)); }
+  75% { transform: translateX(calc(var(--px) * -2)); }
+}
+
 /* ---------- 面板 ---------- */
 .panel {
   background: var(--cream);

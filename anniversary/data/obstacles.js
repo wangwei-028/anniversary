@@ -5,7 +5,7 @@
  *   high —— 高障碍：头顶高于 clearance 就会撞上 → 滑铲 / 变道
  *   full —— 全高障碍：只要同道就撞 → 变道
  *   drop —— 弹道障碍：从天而降 / 从路边扔来，落地瞬间同道就撞 → 移出落点
- *   slip —— 场景机制（便便）：踩到不扣心，只会短暂左右颠倒 → 跳过 / 变道
+ *   slip —— 场景机制（便便）：踩到不扣心，只踉跄一下并记一次失误 → 跳过 / 变道
  * behavior（运动方式）：oscillate 横向往复 / cross 横穿马路 / drop 弹道下落；forward = 自己往前走
  * draw（画法）：lanes 每条道一个 / center 居中一个（spanSprite = 按覆盖车道数取不同宽度的图）/ train 一列 / decal 地面贴花 / strip 沿长度平铺的地面贴花
  * pattern: 'sides' = 同时堵住左右两道、只留中间（港铁闸机）
@@ -37,8 +37,8 @@ export const OBSTACLES = {
     name: '促销横幅',
     category: '高障碍',
     kind: 'high',
-    clearance: 1.1, // 横幅下沿离地高度：滑铲(0.8m)能钻过，站立(1.6m)会撞
-    top: 1.8,
+    clearance: 1.35, // 横幅下沿离地高度：抬高让"钻过去"的空间一眼可见（滑铲 0.8m 轻松过，站立 1.6m 会撞）
+    top: 2.15,
     length: 0.5,
     sprite: 'banner',
     draw: 'center',
@@ -105,8 +105,8 @@ export const OBSTACLES = {
     name: '横杆告示',
     category: '高障碍',
     kind: 'high',
-    clearance: 1.1,
-    top: 1.9,
+    clearance: 1.35,
+    top: 2.25,
     length: 0.4,
     sprite: 'zooSign',
     draw: 'center',
@@ -166,8 +166,7 @@ export const OBSTACLES = {
     draw: 'decal',
     sideMargin: 0.5,
     maxLanes: 1,
-    slipTime: 0.8,
-    tip: '小心便便！踩到会打滑（左右颠倒），跳过去',
+    tip: '小心便便！踩到会踉跄一下，跳过去',
   },
 
   // ================= 第 3 关 · 香港街头 =================
@@ -239,11 +238,12 @@ export const OBSTACLES = {
     name: '气球束',
     category: '高障碍',
     kind: 'high',
-    clearance: 1.05, // 气球束下沿离地高度：滑铲(0.8m)能从绳子间钻过，站立(1.6m)会撞
-    top: 2.0,
+    clearance: 1.35, // 气球束下沿：从天上吊下来（hang），下方留出明显的滑铲空间
+    top: 2.5,
     length: 0.8,
     sprite: 'balloons',
     sideMargin: 0.35,
+    hang: true, // 渲染层从画面顶端画一根吊线到气球束上方
     tip: '气球束：下滑铲过',
   },
   teacup: {
@@ -265,8 +265,8 @@ export const OBSTACLES = {
     name: '摩天轮支架',
     category: '高+全高组合',
     kind: 'high',
-    clearance: 1.1,
-    top: 2.2,
+    clearance: 1.35,
+    top: 2.55,
     length: 0.6,
     sprite: 'ferrisBeam',
     draw: 'center',
@@ -327,8 +327,8 @@ export const OBSTACLES = {
     name: '灯笼串',
     category: '高障碍',
     kind: 'high',
-    clearance: 1.1,
-    top: 1.9,
+    clearance: 1.35,
+    top: 2.25,
     length: 0.4,
     sprite: 'lanterns',
     draw: 'center',
@@ -398,8 +398,8 @@ export const OBSTACLES = {
     name: '冲浪板架',
     category: '高障碍',
     kind: 'high',
-    clearance: 1.1,
-    top: 2.4,
+    clearance: 1.35,
+    top: 2.75,
     length: 0.5,
     sprite: 'surfRack',
     draw: 'center',

@@ -44,7 +44,6 @@ export class Player {
     this.animTime = 0;
     this.squash = 0;
     this.dead = false;
-    this.slipTimer = 0;
     this.ghostTime = 0;
     this.ghostTimer = 0;
     // 动作前的状态（完美闪避判定用）
@@ -116,7 +115,6 @@ export class Player {
   }
 
   changeLane(dir) {
-    if (this.slipTimer > 0) dir = -dir;
     const target = this.lane + dir;
     if (target < -1 || target > 1) {
       this.world.onEdgeBump(dir);
@@ -218,17 +216,10 @@ export class Player {
     this.sliding = 0;
     this.locked = 0;
     this.lockKind = '';
-    this.slipTimer = 0;
     this.flash = 0.2;
   }
 
-  /** 踩到动物便便：一小段时间内左右颠倒 */
-  slip(time) {
-    this.slipTimer = time;
-    this.flash = 0.1;
-  }
-
-  /** 踩到跳板：强制高弹跳（滞空 airTime 秒） */
+  /** 踩跳板：强制高弹跳（滞空 airTime 秒） */
   springLaunch(airTime) {
     this.vy = (GRAVITY * airTime) / 2;
     this.grounded = false;
@@ -296,7 +287,6 @@ export class Player {
     }
 
     if (this.sliding > 0) this.sliding -= dt;
-    if (this.slipTimer > 0) this.slipTimer -= dt;
     if (this.invincible > 0) this.invincible -= dt;
     if (this.skillInvT > 0) this.skillInvT -= dt;
     if (this.locked > 0) this.locked -= dt;

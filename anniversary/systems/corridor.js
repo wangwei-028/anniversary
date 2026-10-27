@@ -7,7 +7,7 @@ import { packColor, mixHex } from './pixel.js';
  * - 两侧墙面：按列求交（类似 Wolfenstein），贴店铺立面贴图（招牌写着 config 里的梗店名）
  * - 远处雾化：10 级雾 + 4×4 Bayer 抖动，像素风过渡
  * - 扶梯区段：地面变成金属台阶 + 扶手
- * - Boss 战车道警示：整条车道泛红闪烁
+ * - Boss 战车道警示：整条车道在障碍压到前最后一刻泛红常亮
  * 每帧只写一次 ImageData（Uint32 直写），不产生垃圾。
  */
 const FOG_LEVELS = 10;
@@ -167,12 +167,11 @@ export class CorridorRenderer {
     const colTex = this.colTex;
     const colVA = this.colVA;
     const colVB = this.colVB;
-    // 车道警戒只显示倒计时的最后 0.8s（慢闪约 2 次）：显示太久会让前后两拨障碍的警戒线连成一片读不清。
-    // 障碍物本体 + 红色描边早就可见，警戒线只是临近时的强调
-    const warnOn = (Math.floor(time * 2.5) & 1) === 0;
-    const w0 = laneWarn[0] > 0 && laneWarn[0] <= 0.8;
-    const w1 = laneWarn[1] > 0 && laneWarn[1] <= 0.8;
-    const w2 = laneWarn[2] > 0 && laneWarn[2] <= 0.8;
+    // 车道警戒与障碍物压到的时刻同步出现：只在倒计时最后 0.5s 常亮（不闪烁、只亮一次）。
+    // 障碍物本体 + 红色描边早就可见，警戒线是压到前最后一刻的强调
+    const w0 = laneWarn[0] > 0 && laneWarn[0] <= 0.5;
+    const w1 = laneWarn[1] > 0 && laneWarn[1] <= 0.5;
+    const w2 = laneWarn[2] > 0 && laneWarn[2] <= 0.5;
     const anyWarn = w0 || w1 || w2;
 
     // ---- 每列：墙面求交 ----
@@ -326,7 +325,7 @@ export class CorridorRenderer {
                 idx = tile ^ (Math.floor((wx + 3.6) / 0.8) & 1) ? TILE_B : TILE_A;
               } else idx = tile ^ (lane & 1) ? TILE_B : TILE_A;
             }
-            if (anyWarn && warnOn && idx !== DIVIDER && idx !== RAIL) {
+            if (anyWarn && idx !== DIVIDER && idx !== RAIL) {
               if ((lane === 0 && w0) || (lane === 1 && w1) || (lane === 2 && w2)) {
                 idx = idx === TILE_B || idx === ESC_B ? WARN_B : WARN_A;
               }

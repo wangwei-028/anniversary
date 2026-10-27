@@ -390,13 +390,12 @@ export const ATTACKS = {
   },
 
   // ---------------- 吞吞 · 遗忘之墨 / 记忆洪流（P2 新） ----------------
-  /** 遗忘之墨：3 秒左右颠倒（复用主角的打滑机制），屏幕蒙上墨色 */
+  /** 遗忘之墨：屏幕蒙上墨色遮挡视野（纯视觉干扰，试玩反馈"左右颠倒不好玩"已移除） */
   ink: {
     fire(d) {
-      d.world.player.slip(3.2);
       d.world.inkT = 3.2;
-      d.hud.tip('遗忘之墨！3 秒内 ←→ 颠倒！', 2.4);
-      d.hud.pop('←→ 颠倒!', d.world.camera.cx, d.world.camera.H * 0.4, '#b39ddb', 11, 1.2);
+      d.hud.tip('遗忘之墨！3 秒内视野被挡住！', 2.4);
+      d.hud.pop('墨水糊脸!', d.world.camera.cx, d.world.camera.H * 0.4, '#b39ddb', 11, 1.2);
       d.audio.play('slip');
       d.boss.sy = 0.8;
     },
@@ -605,7 +604,8 @@ export const PENDING = {
     h.len = 1.2;
     h.height = 2.2;
     h.vz = c.wallSpeed * p.speedMul;
-    d.world.laneWarn[p.lane + 1] = travel + 0.15;
+    // 警戒时长 = 恰好飞行时间：渲染层只显示最后 0.5s，两拍墙（间隔 0.55s）的警戒线不重叠
+    d.world.laneWarn[p.lane + 1] = travel;
     d.audio.play('tock', 1.15);
   },
 };

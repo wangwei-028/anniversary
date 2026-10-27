@@ -8,60 +8,72 @@
  */
 
 export const CONFIG = {
-  // 开发者模式：true = 每次打开金币都是 99999（上限）、关卡全解锁。
-  // 用独立的存档，不会弄乱正式存档；交付前务必改回 false！
-  devMode: true,
-  // TODO: 替换为真实内容 —— 你们在一起的日期（格式 YYYY-MM-DD）
-  anniversaryDate: '2025-10-01',
+  // 开发者模式：默认 false（正式发布状态）。
+  // 标题画面右下角有个不起眼的「·」：输入正确的开发者代码即可开启（记住在本机），
+  // 开启后金币 99999、关卡全解锁，标题出现「调试」按钮，用独立存档不会弄乱正式存档。
+  // 想强制永远开启（例如自己调试）才改成 true。
+  devMode: false,
+  // 开发者代码的 SHA-256 哈希（UTF-8）。代码明文不出现在本项目任何地方。
+  // 想换代码：算出新代码的 SHA-256 十六进制串替换这里即可。
+  devCodeHash: 'b980d9c1078639e8fdb1ab1b42dc080a2baba5bdb5299c913e19c50320343088',
+  // 你们第一次遇见的日子（格式 YYYY-MM-DD）—— 2025-10-27。
+  // 按这个日期数"第 N 天"：满一年（2026-10-27）那天正好是第 365 天，和副标题呼应。
+  anniversaryDate: '2025-10-27',
 
   // 在一起的当天算"第 1 天"（true）还是"第 0 天"（false）。
   // 默认 false：在一起满一年的那天正好显示"第 365 天"，和游戏副标题呼应。
   countStartDayAsOne: false,
 
   // TODO: 替换为真实内容 —— 标题画面"今天是和 TA 在一起的第 N 天"里的称呼（比如你的昵称）
-  partnerCallName: 'TA',
+  partnerCallName: 'honey',
 
   // TODO: 替换为真实内容 —— 你的名字（M3 制作名单、信件落款用）
-  makerName: '你的名字',
+  makerName: '小王',
 
-  // TODO: 替换为真实内容 —— 21 张照片（每关 3 张）+ 每张配一句话。
-  // src 可以是相对路径（推荐把照片放进 assets/photos/ 再写 'assets/photos/1-1.jpg'），
-  // 目前用 picsum 随机风景图占位（需要联网才能显示）。M2 图鉴页 / M3 回忆放映厅会用到。
+  // 21 张照片（每关 3 张）+ 每张配一句话。
+  // 照片已放入 assets/photos/，按"关卡-序号"命名；配文按每张照片的实际内容编写。
   photos: [
-    { level: 1, src: 'https://picsum.photos/seed/anniv-1-1/600/800', caption: '第一次一起逛商场，你在橱窗前站了好久。' }, // TODO: 替换为真实内容
-    { level: 1, src: 'https://picsum.photos/seed/anniv-1-2/600/800', caption: '抓娃娃机前，我们输光了一整袋硬币。' }, // TODO: 替换为真实内容
-    { level: 1, src: 'https://picsum.photos/seed/anniv-1-3/600/800', caption: '那天的奶茶，第二杯半价，第一杯是你。' }, // TODO: 替换为真实内容
-    { level: 2, src: 'https://picsum.photos/seed/anniv-2-1/600/800', caption: '动物园的长颈鹿，比你还爱吃。' }, // TODO: 替换为真实内容
-    { level: 2, src: 'https://picsum.photos/seed/anniv-2-2/600/800', caption: '你说企鹅走路像我。' }, // TODO: 替换为真实内容
-    { level: 2, src: 'https://picsum.photos/seed/anniv-2-3/600/800', caption: '猴子抢走了你的香蕉，你抢走了我的心。' }, // TODO: 替换为真实内容
-    { level: 3, src: 'https://picsum.photos/seed/anniv-3-1/600/800', caption: '香港的霓虹灯下，你比招牌还亮。' }, // TODO: 替换为真实内容
-    { level: 3, src: 'https://picsum.photos/seed/anniv-3-2/600/800', caption: '茶餐厅的菠萝油，你分了我一半。' }, // TODO: 替换为真实内容
-    { level: 3, src: 'https://picsum.photos/seed/anniv-3-3/600/800', caption: '叮叮车上，我们看了一整晚夜景。' }, // TODO: 替换为真实内容
-    { level: 4, src: 'https://picsum.photos/seed/anniv-4-1/600/800', caption: '旋转木马转了三圈，你笑了三圈。' }, // TODO: 替换为真实内容
-    { level: 4, src: 'https://picsum.photos/seed/anniv-4-2/600/800', caption: '过山车上你抓着我的手没放开。' }, // TODO: 替换为真实内容
-    { level: 4, src: 'https://picsum.photos/seed/anniv-4-3/600/800', caption: '烟花开始的时候，我在看你。' }, // TODO: 替换为真实内容
-    { level: 5, src: 'https://picsum.photos/seed/anniv-5-1/600/800', caption: '夜市的章鱼烧，烫到你直跺脚。' }, // TODO: 替换为真实内容
-    { level: 5, src: 'https://picsum.photos/seed/anniv-5-2/600/800', caption: '你说这串最好吃，因为是我递的。' }, // TODO: 替换为真实内容
-    { level: 5, src: 'https://picsum.photos/seed/anniv-5-3/600/800', caption: '人很多，但我只看得见你。' }, // TODO: 替换为真实内容
-    { level: 6, src: 'https://picsum.photos/seed/anniv-6-1/600/800', caption: '海边的风把你的头发吹乱了。' }, // TODO: 替换为真实内容
-    { level: 6, src: 'https://picsum.photos/seed/anniv-6-2/600/800', caption: '沙滩上写的名字，被浪带走了，没关系。' }, // TODO: 替换为真实内容
-    { level: 6, src: 'https://picsum.photos/seed/anniv-6-3/600/800', caption: '日落的时候，你说想一直这样。' }, // TODO: 替换为真实内容
-    { level: 7, src: 'https://picsum.photos/seed/anniv-7-1/600/800', caption: '回家的路上，路灯一盏一盏亮起来。' }, // TODO: 替换为真实内容
-    { level: 7, src: 'https://picsum.photos/seed/anniv-7-2/600/800', caption: '一起做的第一顿饭，有点糊。' }, // TODO: 替换为真实内容
-    { level: 7, src: 'https://picsum.photos/seed/anniv-7-3/600/800', caption: '在一起的第 365 天，还想要很多个 365 天。' }, // TODO: 替换为真实内容
+    // 第 1 关 · 商场
+    { level: 1, src: 'assets/photos/1-1.jpg', caption: '抹茶麻薯把宝宝吃美了。' },
+    { level: 1, src: 'assets/photos/1-2.jpg', caption: '红毯、王座、聚光灯，你一坐下，整层商场都是你的片场。' },
+    { level: 1, src: 'assets/photos/1-3.jpg', caption: '彩灯树下没忍住亲了你。' },
+    // 第 2 关 · 动物园
+    { level: 2, src: 'assets/photos/2-1.jpg', caption: '第一次的拥抱。' },
+    { level: 2, src: 'assets/photos/2-2.jpg', caption: '哈哈哈呲牙的大猩猩。' },
+    { level: 2, src: 'assets/photos/2-3.jpg', caption: '你跳起来的那一刻真好看。' },
+    // 第 3 关 · 城市之夜
+    { level: 3, src: 'assets/photos/3-1.jpg', caption: '霓虹灯一亮，整条街就只剩你最好看。' },
+    { level: 3, src: 'assets/photos/3-2.jpg', caption: '看着大桥，吹着晚风。' },
+    { level: 3, src: 'assets/photos/3-3.jpg', caption: '你站在花墙前，花都不好意思开了。' },
+    // 第 4 关 · 游乐园
+    { level: 4, src: 'assets/photos/4-1.jpg', caption: '摩天轮挂在高空的时候，我们立下了誓约。' },
+    { level: 4, src: 'assets/photos/4-2.jpg', caption: '出来露营的宝宝，洋溢着幸福和快乐。' },
+    { level: 4, src: 'assets/photos/4-3.jpg', caption: '旋转木马没坐上，你骑着骆驼，一样神气。' },
+    // 第 5 关 · 夜市
+    { level: 5, src: 'assets/photos/5-1.jpg', caption: '左手水果右手花，你是整条街最亮的星。' },
+    { level: 5, src: 'assets/photos/5-2.jpg', caption: '哈哈哈咸鸭蛋。' },
+    { level: 5, src: 'assets/photos/5-3.jpg', caption: '你戴着苹果发箍问我可爱吗，我说我融化了。' },
+    // 第 6 关 · 海边
+    { level: 6, src: 'assets/photos/6-1.jpg', caption: '海风、大桥和你，今天一样都没少。' },
+    { level: 6, src: 'assets/photos/6-2.jpg', caption: '海边漫步~' },
+    { level: 6, src: 'assets/photos/6-3.jpg', caption: '接收到来自远方的思念，宝宝为我画的可爱爱心！' },
+    // 第 7 关 · 回家
+    { level: 7, src: 'assets/photos/7-1.jpg', caption: '回家的路上，影子都学会比心了。' },
+    { level: 7, src: 'assets/photos/7-2.jpg', caption: '我也想你宝宝。' },
+    { level: 7, src: 'assets/photos/7-3.jpg', caption: '小王家的可爱宝宝。' },
   ],
 
   // TODO: 替换为真实内容 —— 隐藏结局《回忆放映厅》最后那封信（M3 使用）。交付前一定要换成你自己写的！
   letter: {
-    title: '给你的一封信',
+    title: '给小鱼的一封信',
     paragraphs: [
-      '亲爱的你：',
-      '这是一封示例信。等你看到这里的时候，你已经跑过了我们这一年去过的每一个地方。',
+      '亲爱的小鱼：',
+      '等你看到这里的时候，你已经跑过了我们这一年去过的每一个地方。',
       '商场、动物园、香港的街头、游乐园、夜市、海边，最后是家。',
-      '谢谢你这一年里每一次的耐心、每一次的笑、每一次"没关系，有我"。',
-      '下一年，下一关，我们一起玩。',
+      '谢谢你这一年里每一次的陪伴、每一次的哭和笑、每一次"爱你，宝宝"。',
+      '下一年，下一关，我们继续一起玩。',
     ],
-    signature: '—— 永远站在你这边的我',
+    signature: '—— 永远陪着你的小王',
   },
 
   memes: {
@@ -76,14 +88,14 @@ export const CONFIG = {
     ],
     // TODO: 替换为真实内容 —— 商场关的商铺招牌（你们的梗店名），建议每个 2~7 个字
     shopNames: [
-      '小猪奶茶铺',
-      '第二杯半价',
-      '想你便利店',
-      '抓娃娃专门店',
-      '贴贴服饰',
-      '干饭研究所',
-      '宝宝甜品屋',
-      '拍照打卡点',
+      '煲珠公奶茶',
+      'KFC',
+      '零食很忙',
+      '抓娃娃',
+      '优衣库',
+      '小菜园',
+      '赵记传承',
+      '潮发牛肉火锅',
     ],
     // TODO: 替换为真实内容 —— 动物园关路边的指路牌（可以写你们那天看过的动物 / 梗），建议每个 2~6 个字
     zooSigns: ['熊猫馆 →', '← 长颈鹿', '企鹅馆', '猴山 →', '请勿投喂', '小心便便'],
@@ -99,7 +111,7 @@ export const CONFIG = {
     // TODO: 替换为真实内容 —— 游乐园关路边的指路牌（你们一起玩过的项目），建议每个 2~6 个字
     parkSigns: ['旋转木马 →', '← 过山车', '摩天轮', '棉花糖', '碰碰车 →', '鬼屋（别去）'],
     // TODO: 替换为真实内容 —— 夜市关的摊位招牌（你们一起吃过的小吃），建议每个 2~5 个字
-    marketSigns: ['章鱼烧', '烤鱿鱼', '臭豆腐', '糖葫芦', '烤冷面', '珍珠奶茶', '铁板烧'],
+    marketSigns: ['风干鸭货', '烤鱿鱼', '臭豆腐', '糖葫芦', '烤冷面', '珍珠奶茶', '铁板烧'],
   },
 
   // TODO: 可选 —— 金币中间的图案（彩蛋）：留空 = 小爱心；写一个字 / 符号（如 '宝'、'L'）= 你们的暗号；

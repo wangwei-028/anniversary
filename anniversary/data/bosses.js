@@ -140,14 +140,14 @@ export const BOSSES = {
       couponWall: {
         speed: 12,
         lowHeight: 0.8, // 低空券：顶部 0.8m（跳过）
-        highClearance: 1.1, // 高空券：底部 1.1m（滑铲钻过）
-        highTop: 2.6,
+        highClearance: 1.35, // 高空券：底部 1.35m（滑铲钻过，抬高让空间一眼可见）
+        highTop: 2.85,
         length: 0.7,
       },
-      // 气球幕墙（新）：整排气球压过来，滑铲钻过
-      balloonWall: { speed: 12, length: 0.7, lowHeight: 0.8, highClearance: 1.05, highTop: 2.6, spriteLow: 'balloons', spriteHigh: 'balloons', draw: 'lanes' },
+      // 气球幕墙（新）：整排气球从天上吊下来，滑铲钻过（hang = 渲染层画吊线）
+      balloonWall: { speed: 12, length: 0.7, lowHeight: 0.8, highClearance: 1.35, highTop: 2.6, spriteLow: 'balloons', spriteHigh: 'balloons', draw: 'lanes', hang: true },
       // 彩带横梁（新）：挂在头顶的促销彩带，滑铲
-      ribbonBeam: { speed: 11.5, length: 0.7, lowHeight: 0.8, highClearance: 1.05, highTop: 2.6, spriteLow: 'ribbon', spriteHigh: 'ribbon', draw: 'lanes', anim: true, fps: 8 },
+      ribbonBeam: { speed: 11.5, length: 0.7, lowHeight: 0.8, highClearance: 1.35, highTop: 2.6, spriteLow: 'ribbon', spriteHigh: 'ribbon', draw: 'lanes', hang: true, anim: true, fps: 8 },
       giantGift: {
         speed: 11,
         height: 1.5,
@@ -255,7 +255,7 @@ export const BOSSES = {
       barrel: { speed: 13, height: 1.0, length: 1.0 },
       goldBarrel: { speed: 10, height: 1.0, length: 1.0 },
       // 藤蔓双荡（新）：影子逐道扫，低荡扫腿(跳)、高荡扫头顶(铲)
-      vineSweep: { speed: 12, beat: 0.45, length: 1.2, lowHeight: 1.0, highClearance: 1.05, highTop: 2.5, spriteLow: 'barrel', spriteHigh: 'banner' },
+      vineSweep: { speed: 12, beat: 0.45, length: 1.2, lowHeight: 1.0, highClearance: 1.35, highTop: 2.85, spriteLow: 'barrel', spriteHigh: 'banner' },
       // 跑道塌陷（新）：一条道整个塌成坑，锁 2.2 秒
       pit: { speed: 11, length: 8, height: 2.5, lockTime: 2.2, telegraphExtra: 0.35, sprite: 'pit', draw: 'strip' },
       bananaCarpet: { speed: 12, length: 8, height: 0.3, springAhead: 5, springAir: 1.25, telegraphExtra: 0.4 },
@@ -352,7 +352,7 @@ export const BOSSES = {
       bunTriple: { flightTime: 1.0, arcHeight: 5, gap: 0.45, count: 3 },
       wokWave: { speed: 12, height: 0.5, length: 0.6 },
       // 餐盘节奏链（新）：一排排餐盘，低空(跳)/吊着(铲)交替
-      trayWall: { speed: 11.5, length: 0.7, lowHeight: 0.85, highClearance: 1.05, highTop: 2.6, spriteLow: 'trayLow', spriteHigh: 'trayHigh', draw: 'stretch' },
+      trayWall: { speed: 11.5, length: 0.7, lowHeight: 0.85, highClearance: 1.35, highTop: 2.85, spriteLow: 'trayLow', spriteHigh: 'trayHigh', draw: 'stretch' },
     },
   },
 
@@ -699,7 +699,7 @@ export const BOSSES = {
       {
         // 混合考卷 · 下半场：游乐园 & 夜市 & 海边的招牌机制 + 遗忘之墨
         name: '回忆 · 游乐园 & 夜市 & 海边',
-        hint: '追逐链、触手、沙墙！墨水会左右颠倒！',
+        hint: '追逐链、触手、沙墙！墨水会挡住视线！',
         expression: 'angry',
         waves: [
           { spawns: [{ combo: [{ type: 'chaseChain' }, { type: 'beatWave', delay: 1.3 }], every: 4.2, offset: 0.5 }] },
@@ -798,10 +798,10 @@ export const BOSSES = {
       blindBox: { flightTime: 1.1, landZ: 16, arcHeight: 5, confettiSpeed: 9.5, confettiHeight: 0.45, confettiLength: 0.8, fanTime: 0.35 },
       barrel: { speed: 12, height: 1.0, length: 1.0 },
       goldBarrel: { speed: 10, height: 1.0, length: 1.0 },
-      balloonWall: { speed: 12, length: 0.7, lowHeight: 0.8, highClearance: 1.05, highTop: 2.6, spriteLow: 'balloons', spriteHigh: 'balloons', draw: 'lanes' },
-      ribbonBeam: { speed: 11.5, length: 0.7, lowHeight: 0.8, highClearance: 1.05, highTop: 2.6, spriteLow: 'ribbon', spriteHigh: 'ribbon', draw: 'lanes', anim: true, fps: 8 },
-      trayWall: { speed: 11.5, length: 0.7, lowHeight: 0.85, highClearance: 1.05, highTop: 2.6, spriteLow: 'trayLow', spriteHigh: 'trayHigh', draw: 'stretch' },
-      vineSweep: { speed: 12, beat: 0.45, length: 1.2, lowHeight: 1.0, highClearance: 1.05, highTop: 2.5, spriteLow: 'barrel', spriteHigh: 'banner' },
+      balloonWall: { speed: 12, length: 0.7, lowHeight: 0.8, highClearance: 1.35, highTop: 2.6, spriteLow: 'balloons', spriteHigh: 'balloons', draw: 'lanes', hang: true },
+      ribbonBeam: { speed: 11.5, length: 0.7, lowHeight: 0.8, highClearance: 1.35, highTop: 2.6, spriteLow: 'ribbon', spriteHigh: 'ribbon', draw: 'lanes', hang: true, anim: true, fps: 8 },
+      trayWall: { speed: 11.5, length: 0.7, lowHeight: 0.85, highClearance: 1.35, highTop: 2.85, spriteLow: 'trayLow', spriteHigh: 'trayHigh', draw: 'stretch' },
+      vineSweep: { speed: 12, beat: 0.45, length: 1.2, lowHeight: 1.0, highClearance: 1.35, highTop: 2.85, spriteLow: 'barrel', spriteHigh: 'banner' },
       chaseChain: { speed: 14, beat: 0.7, count: 6, length: 1.2, height: 2.2, sprite: 'ribbon' },
       tentacle: { speed: 10.5, length: 2.4, height: 3.2, lockTime: 3.0, telegraphExtra: 0.35, reSlam: 1.3, sprite: 'tentacle', draw: 'center', fps: 6 },
       dualLob: { count: 5, interval: 0.55, sprite: 'takoBall' },

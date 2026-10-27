@@ -162,7 +162,7 @@ export class World {
     this.skillBoostT = 0;
     // 完美反击的命中窗口（由 Boss 导演在丢出还击物时刷新，渲染层画金圈用）
     this.reflectWindow = 0;
-    // 遗忘之墨：左右颠倒的视觉强度（吞吞专用，便便打滑不触发）
+    // 遗忘之墨：蒙住屏幕的墨色强度（吞吞专用，纯视觉干扰，不改变操作）
     this.inkT = 0;
     this.inkLevel = 0;
     // 渲染排序用的预分配列表
@@ -690,14 +690,12 @@ export class World {
     this.hitPlayer(h);
   }
 
-  /** 动物便便：0.8s 内变道方向颠倒（喜剧障碍，不扣心） */
+  /** 动物便便（喜剧障碍，不扣心）：踉跄一下 + 记一次失误，不影响操作方向 */
   onSlip(h) {
-    const cfg = h.cfg || {};
-    this.player.slip(cfg.slipTime || 0.8);
     this.session.mistakes++;
     this.audio.play('slip');
     this.camera.shake(1.5);
-    this.hud.pop('打滑啦！方向颠倒', this.playerScreenX(), this.camera.feetY - 46, '#c98a3c', 8, 1);
+    this.hud.pop('踩到便便!', this.playerScreenX(), this.camera.feetY - 46, '#c98a3c', 8, 1);
   }
 
   /** 跳板 / 弹床：强制高弹跳（蟹老板的金色跳板同时触发踩跳还击） */
@@ -1240,6 +1238,7 @@ function resetHazard(h) {
   h.shouted = false;
   h.bounces = 0;
   h.aimMiss = false;
+  h.hang = false;
   h.x = 0;
   h.halfW = 1;
   h.lanes = 1;

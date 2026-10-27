@@ -246,7 +246,7 @@ export const LEVELS = [
     bossMusic: 'boss',
     env: { ceiling: false, wallHeight: 5, floor: 'path', decorX: 5.4, decorY: 0 },
     introObstacles: ['animalCart', 'zooSign', 'peacockCar', 'penguins', 'banana'],
-    mechanic: '打滑便便：踩到会左右颠倒（不扣心），跳过去就没事',
+    mechanic: '打滑便便：踩到只踉跄一下（不扣心），跳过去就没事',
     counterHint: '跳上金色滚桶弹起来，踩金刚的头！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'peacockCar' },

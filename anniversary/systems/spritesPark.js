@@ -12,18 +12,20 @@ const CANDY = ['#ff6fa5', '#ffd23f', '#4fb3ff', '#5cc77a', '#a77bff', '#ff8a3c']
 // 障碍
 // ------------------------------------------------------------------
 
+/** 气球束（滑铲钻过）：从天上吊下来的一束气球（渲染层会从画面顶端画一根吊线到它上面），
+ *  画布 18px 锚定在 clearance 上 → 气球整体吊在 ~1.5m 以上，下方留出明显的钻过空间 */
 function drawBalloons() {
-  const a = new PixelArt(22, 26);
+  const a = new PixelArt(22, 18);
   const cols = ['#ff4f6d', '#ffd23f', '#4fb3ff', '#a77bff'];
   const pos = [
     [6, 5],
     [15, 4],
     [10, 9],
-    [17, 11],
+    [17, 10],
   ];
   for (let i = 0; i < pos.length; i++) {
     const [x, y] = pos[i];
-    a.line(x, y + 4, 11, 21, '#8a7a90');
+    a.line(x, y + 4, 11, 15, '#8a7a90');
   }
   for (let i = 0; i < pos.length; i++) {
     const [x, y] = pos[i];
@@ -31,9 +33,8 @@ function drawBalloons() {
     a.set(x - 1, y - 2, '#ffffff');
     a.set(x, y + 4, mixHex(cols[i], '#000000', 0.25));
   }
-  // 小沙袋
-  a.rect(8, 21, 7, 5, '#c98a4b');
-  a.rect(8, 21, 7, 1, '#e8b56a');
+  // 底下收成一个小结
+  a.rect(10, 15, 3, 2, '#8a7a90');
   a.outline(INK);
   return a.toCanvas();
 }
@@ -73,13 +74,14 @@ function drawTeacup(frame) {
 
 /** 摩天轮横梁（滑铲钻过） */
 function drawFerrisBeam(lanes) {
+  // 画布 42px：横梁吊在 ~1.7m 以上，下方留出明显的滑铲空间
   const w = Math.round(lanes * 38.4) + 2;
-  const a = new PixelArt(w, 36);
+  const a = new PixelArt(w, 42);
   const steel = '#e8eaf2';
   const red = '#ff4f6d';
-  a.rect(1, 1, 3, 35, steel);
-  a.rect(w - 4, 1, 3, 35, steel);
-  a.rect(2, 1, 1, 35, '#ffffff');
+  a.rect(1, 1, 3, 41, steel);
+  a.rect(w - 4, 1, 3, 41, steel);
+  a.rect(2, 1, 1, 41, '#ffffff');
   a.rect(3, 1, w - 6, 3, red);
   a.rect(3, 13, w - 6, 3, red);
   for (let x = 3; x < w - 6; x += 6) {

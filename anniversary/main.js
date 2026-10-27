@@ -1,7 +1,7 @@
 import { Screen } from './systems/screen.js';
 import { Input } from './systems/input.js';
 import { AudioSystem } from './systems/audio.js';
-import { SaveSystem } from './systems/save.js';
+import { SaveSystem, isDevActive } from './systems/save.js';
 import { buildCommonSprites, buildMallSprites, applySkin, applyCoinMark, SPRITES } from './systems/sprites.js';
 import { buildZooSprites } from './systems/spritesZoo.js';
 import { buildHkSprites } from './systems/spritesHk.js';
@@ -35,6 +35,7 @@ import { clear } from './systems/ui.js';
  *       第 7 关通关 → ending 回家演出 → result → theater 回忆放映厅
  *       endless 无尽模式 / rush Boss Rush「回忆风暴」→ starry 群星之夜
  * 调试：网址后加 ?debug=1 → 显示 FPS 等信息，并启用快捷键（见 README）
+ *       开发者模式：默认关闭；标题画面输入开发者代码开启（见 TitleScene.showCodeModal）
  */
 class Game {
   constructor() {
@@ -43,7 +44,9 @@ class Game {
     this.screen = new Screen(this.canvas, this.ui);
     this.input = new Input(this.canvas);
     this.audio = new AudioSystem();
-    this.save = new SaveSystem(CONFIG.devMode);
+    // 开发者模式：config.devMode 为强制开启；否则看本机是否已用开发者代码开启过（存在 localStorage）
+    this.isDev = CONFIG.devMode || isDevActive();
+    this.save = new SaveSystem(this.isDev);
     this.audio.setMuted(!!this.save.data.settings.muted);
     this.debug = /[?&]debug(=|&|$)/.test(location.search);
 

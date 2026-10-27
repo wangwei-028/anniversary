@@ -3,12 +3,33 @@
  * - 数据结构带 version 字段；读档时按 MIGRATIONS 逐版本升级，再与默认结构深合并补齐新字段 → 改版不丢档
  * - 存档损坏时把原始字符串备份到 KEY + '.corrupt'，不直接覆盖
  * - localStorage 不可用（隐私模式等）时退化为内存存档，游戏照常运行
- * - 开发者模式（config.devMode）：使用独立存档 KEY + '.dev'，每次启动金币拉满、关卡全解锁
+ * - 开发者模式（默认关闭）：默认存档 KEY；开启后用 KEY + '.dev' 独立存档，每次启动金币拉满、关卡全解锁。
+ *   开启方式：标题画面输入开发者代码（校验 config.devCodeHash，原码不出现在代码里），见 main.js / TitleScene.js
  */
 import { ECONOMY } from '../data/economy.js';
 
 const KEY = 'benxiangni.save';
+// 开发者模式开关存在独立的 localStorage 键里（不进存档本体）：存档 key 的选择依赖于它
+const DEV_ACTIVE_KEY = 'benxiangni.devmode';
 export const SAVE_VERSION = 3;
+
+/** 开发者模式是否已通过代码开启（config.devMode 为强制开启的兜底） */
+export function isDevActive() {
+  try {
+    return window.localStorage.getItem(DEV_ACTIVE_KEY) === '1';
+  } catch (e) {
+    return false;
+  }
+}
+
+export function setDevActive(on) {
+  try {
+    if (on) window.localStorage.setItem(DEV_ACTIVE_KEY, '1');
+    else window.localStorage.removeItem(DEV_ACTIVE_KEY);
+  } catch (e) {
+    /* 隐私模式等存不进去就当没开启 */
+  }
+}
 
 function defaultLevelRecord() {
   return { cleared: false, clears: 0, plays: 0, bestCoins: 0, bestPerfects: 0, stars: [false, false, false], photos: [false, false, false], bossSeen: false };

@@ -253,12 +253,23 @@ function hazardSortZ(h) {
   return h.z + Math.min(h.len, 1.5) * 0.5;
 }
 
-/** 取精灵：多车道版本 / 动画帧 */
+/** 取精灵：多车道版本 / 动画帧（数组带占位 null 时兜底到最后一帧） */
 function spriteOf(world, h) {
   const img = SPRITES[h.sprite];
   if (!Array.isArray(img)) return img;
   if (h.spanSprite) return img[h.lanes] || img[img.length - 1];
-  return img[Math.floor(world.time * h.fps) % img.length];
+  return img[Math.floor(world.time * h.fps) % img.length] || img[img.length - 1];
+}
+
+/** 悬挂的高障碍：一条从画面顶端垂到障碍顶部的蓝色虚线（2px 粗，与"滑铲"的蓝色描边同色，
+ *  一眼看出"它吊在半空、下面钻过去"） */
+function drawHangLine(ctx, cam, x, z, top) {
+  if (!cam.project(x, top, z)) return;
+  const px = Math.round(cam.px);
+  ctx.globalAlpha = 0.6;
+  ctx.fillStyle = GLOW_SLIDE;
+  for (let y = 0; y < cam.py; y += 4) ctx.fillRect(px - 1, y, 2, 2);
+  ctx.globalAlpha = 1;
 }
 
 function drawHazardDecal(world, ctx, cam, h) {
@@ -370,8 +381,14 @@ function drawHazard(world, ctx, cam, h) {
       break;
     }
     default: {
+      // 高障碍（钻过去的）整体锚定在 clearance 上：贴地画会和"跳过去的低障碍"分不清；
+      // 悬挂类的（气球束 / 彩带）再从天上吊一根线下来
+      const yBase = h.kind === 'high' ? h.clearance : 0;
+      if (h.kind === 'high' && (h.hang || (h.cfg && h.cfg.hang))) {
+        for (let l = 0; l < h.lanes; l++) drawHangLine(ctx, cam, (h.lane + l) * LW, h.z, h.top);
+      }
       for (let d = h.deep - 1; d >= 0; d--) {
-        for (let l = 0; l < h.lanes; l++) billboard(ctx, cam, img, (h.lane + l) * LW, by, h.z + d * 1.2, 1);
+        for (let l = 0; l < h.lanes; l++) billboard(ctx, cam, img, (h.lane + l) * LW, yBase + by, h.z + d * 1.2, 1);
       }
     }
   }
@@ -450,8 +467,6 @@ function drawPlayer(world, ctx, cam, p) {
   const h = Math.round(32 * (1 - sq * 0.22));
   ctx.drawImage(img, Math.round(px - w / 2), Math.round(py - h + 1), w, h);
   if (blinkHide) ctx.globalAlpha = 1;
-  // 打滑：头顶冒问号
-  if (p.slipTimer > 0) ctx.drawImage(S.pStar, Math.round(px - 2 + Math.sin(world.time * 20) * 4), Math.round(py - 38));
   // 护盾泡泡
   if ((s.shield > 0 || (world.mode === 'boss' && s.bossShield > 0)) && !p.dead) {
     const wob = Math.sin(world.time * 6) * 1.5;
@@ -544,7 +559,7 @@ function drawScreenEffects(world, ctx, W, H) {
 
   if (world.rainLevel > 0.02) drawRain(world, ctx, W, H);
   if (world.sandLevel > 0.02) drawSand(world, ctx, W, H);
-  // 遗忘之墨：紫黑墨幕 + 边缘晕染（左右颠倒期间）
+  // 遗忘之墨：紫黑墨幕 + 边缘晕染（蒙住视野期间）
   if (world.inkLevel > 0.02) drawInk(world, ctx, W, H);
   // 潮汐预警：屏幕两侧泛蓝
   if (world.tideWarn > 0) {
@@ -632,7 +647,7 @@ function hash(n) {
   return x - Math.floor(x);
 }
 
-/** 遗忘之墨（纯视觉）：紫黑墨幕从两侧晕开 + 缓慢流动的墨丝（左右颠倒期间） */
+/** 遗忘之墨（纯视觉）：紫黑墨幕从两侧晕开 + 缓慢流动的墨丝（蒙住视野期间） */
 function drawInk(world, ctx, W, H) {
   const lv = world.inkLevel;
   ctx.globalAlpha = 0.22 * lv;

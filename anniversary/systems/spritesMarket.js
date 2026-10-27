@@ -67,12 +67,12 @@ function drawStools() {
   return a.toCanvas();
 }
 
-/** 灯笼串（滑铲钻过） */
+/** 灯笼串（滑铲钻过）。画布 38px，灯笼吊在 ~1.4m 以上 */
 function drawLanterns(lanes) {
   const w = Math.round(lanes * 38.4) + 2;
-  const a = new PixelArt(w, 32);
-  a.rect(1, 0, 2, 32, '#5a4636');
-  a.rect(w - 3, 0, 2, 32, '#5a4636');
+  const a = new PixelArt(w, 38);
+  a.rect(1, 0, 2, 38, '#5a4636');
+  a.rect(w - 3, 0, 2, 38, '#5a4636');
   for (let x = 3; x < w - 3; x++) a.set(x, 2 + Math.round(Math.sin((x / (w - 6)) * Math.PI) * 2), '#3b2a22');
   for (let x = 9; x < w - 6; x += 10) {
     const y = 3 + Math.round(Math.sin(((x - 3) / (w - 6)) * Math.PI) * 2);

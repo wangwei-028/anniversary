@@ -632,13 +632,14 @@ function drawCart(tint) {
 }
 
 function drawBanner(lanes) {
+  // 画布 36px（2.25m）：横幅布吊在 ~1.4m 以上，下方留出明显的滑铲空间
   const w = Math.round(lanes * 38.4) + 2;
-  const a = new PixelArt(w, 30);
+  const a = new PixelArt(w, 36);
   const pole = '#8f9bb3';
-  a.rect(1, 2, 2, 28, pole);
-  a.rect(w - 3, 2, 2, 28, pole);
-  a.rect(2, 2, 1, 28, '#c3cad8');
-  a.rect(w - 2, 2, 1, 28, '#c3cad8');
+  a.rect(1, 2, 2, 34, pole);
+  a.rect(w - 3, 2, 2, 34, pole);
+  a.rect(2, 2, 1, 34, '#c3cad8');
+  a.rect(w - 2, 2, 1, 34, '#c3cad8');
   a.rect(0, 0, 4, 2, '#ffd23f');
   a.rect(w - 4, 0, 4, 2, '#ffd23f');
   a.rect(3, 2, w - 6, 11, '#ff5c9a');

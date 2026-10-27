@@ -884,6 +884,7 @@ export class BossDirector {
     h.band = band;
     h.lanes = 3;
     h.lane = -1;
+    h.hang = !!cfg.hang; // 悬挂类高空带（气球幕墙 / 彩带）：渲染层画"从天上吊一根线"
     h.x = 0;
     h.halfW = 1.5 * LANE_W - 0.2;
     h.z = this.data.z - 1;
