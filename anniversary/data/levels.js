@@ -94,13 +94,13 @@ export const LEVELS = [
     bossMusic: 'boss',
     env: { ceiling: true, wallHeight: 12, floor: 'tiles', decorX: 5.5, decorY: 3.6 },
     // 关卡准备页展示的新障碍说明
-    introObstacles: ['cart', 'banner', 'planter', 'tourists', 'giftRain'],
+    introObstacles: ['cart', 'planter', 'tourists', 'giftRain'],
     mechanic: '扶梯：上扶梯加速、下扶梯减速',
     counterHint: '礼盒金圈亮起的瞬间按 J / 点屏幕拍回去！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'planter' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       // 节奏结构（4.1）：热身 ~15s → 波次×3（~90s，波间喘息）→ 冲刺 ~15s → Boss 登场 3s
@@ -117,9 +117,9 @@ export const LEVELS = [
           // 教学行铺满（或只留一条生路），保证玩家一定会做一次对应动作
           script: [
             { type: 'cart', lanes: 3 },
-            { type: 'banner', lanes: 3 },
             { type: 'planter', lanes: 2, lane: 'player' },
             { type: 'cart', lanes: 2, lane: 'player' },
+            { type: 'tourists', lanes: 1, lane: 'player' },
           ],
           coinChance: 1,
           pickupChance: 0,
@@ -160,13 +160,12 @@ export const LEVELS = [
           id: 'wave2',
           kind: 'wave',
           title: '第 2 波',
-          subtitle: '横幅 & 观光人群',
+          subtitle: '花坛 & 观光人群',
           duration: 25,
           intervalMul: 1.05,
           pool: [
-            { type: 'banner', lanes: 3, w: 2 },
-            { type: 'banner', lanes: 1, w: 2 },
-            { type: 'banner', lanes: 2, w: 1 },
+            { type: 'planter', lanes: 2, w: 3 },
+            { type: 'planter', lanes: 1, w: 1 },
             { type: 'tourists', lanes: 1, w: 4 },
           ],
           // 专属机制 · 扶梯：上扶梯镜头抬高、速度 +20%
@@ -222,7 +221,6 @@ export const LEVELS = [
           intervalMul: 1.7,
           pool: [
             { type: 'cart', lanes: 1, w: 2 },
-            { type: 'banner', lanes: 1, w: 1 },
           ],
           coinRain: true,
           coinChance: 1,
@@ -251,7 +249,7 @@ export const LEVELS = [
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'peacockCar' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       sections: [
@@ -378,7 +376,7 @@ export const LEVELS = [
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'busStop' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       sections: [
@@ -590,7 +588,7 @@ const LEVELS_M3 = {
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'ferrisPillar' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       sections: [
@@ -704,7 +702,7 @@ const LEVELS_M3 = {
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'snackCart' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       sections: [
@@ -815,7 +813,7 @@ const LEVELS_M3 = {
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'reef' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       sections: [
@@ -924,13 +922,13 @@ const LEVELS_M3 = {
     finale: true,
     rainTip: '下雨了，快点跑回家~',
     env: { ceiling: false, wallHeight: 10, floor: 'asphalt', decorX: 5.3, decorY: 0 },
-    introObstacles: ['mailbox', 'trashBins', 'cart', 'banner', 'busStop', 'stools', 'ribbon', 'jelly'],
+    introObstacles: ['mailbox', 'trashBins', 'cart', 'busStop', 'stools', 'ribbon', 'jelly'],
     mechanic: '回家的路：前 6 关的障碍都会回来；中段「回忆走廊」放慢 10 秒',
     counterHint: '吞吞每个阶段随机考一种还击（完美反击 / 踩跳 / 投掷 / 冲刺），看提示操作！',
     photos: [
       { type: 'branch', section: 'wave1', at: 0.5, obstacle: 'mailbox' },
       { type: 'skill', from: 'wave2', streak: 2 },
-      { type: 'challenge', section: 'wave3' },
+      { type: 'clear', section: 'wave3' },
     ],
     run: {
       sections: [
@@ -944,9 +942,9 @@ const LEVELS_M3 = {
           rain: true,
           script: [
             { type: 'trashBins', lanes: 3 },
-            { type: 'banner', lanes: 3 },
             { type: 'mailbox', lanes: 2, lane: 'player' },
             { type: 'cart', lanes: 1, lane: 'player' },
+            { type: 'busStop', lanes: 1, lane: 'player' },
           ],
           coinChance: 1,
           pickupChance: 0,
@@ -962,7 +960,6 @@ const LEVELS_M3 = {
           rain: true,
           pool: [
             { type: 'cart', lanes: 1, w: 2 },
-            { type: 'banner', lanes: 3, w: 2 },
             { type: 'mailbox', lanes: 2, w: 2 },
             { type: 'penguins', lanes: 1, w: 2 },
             { type: 'busStop', lanes: 1, w: 1 },
@@ -1031,7 +1028,7 @@ const LEVELS_M3 = {
           rain: true,
           pool: [
             { type: 'trashBins', lanes: 1, w: 2 },
-            { type: 'banner', lanes: 1, w: 1 },
+            { type: 'stools', lanes: 1, w: 1 },
           ],
           coinRain: true,
           coinChance: 1,

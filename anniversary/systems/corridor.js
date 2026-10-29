@@ -167,11 +167,11 @@ export class CorridorRenderer {
     const colTex = this.colTex;
     const colVA = this.colVA;
     const colVB = this.colVB;
-    // 车道警戒与障碍物压到的时刻同步出现：只在倒计时最后 0.5s 常亮（不闪烁、只亮一次）。
-    // 障碍物本体 + 红色描边早就可见，警戒线是压到前最后一刻的强调
-    const w0 = laneWarn[0] > 0 && laneWarn[0] <= 0.5;
-    const w1 = laneWarn[1] > 0 && laneWarn[1] <= 0.5;
-    const w2 = laneWarn[2] > 0 && laneWarn[2] <= 0.5;
+    // 车道警戒与障碍物同进同出：障碍物出现在路上 → 该道红线亮起，一直亮到它压过去。
+    // 各攻击在"障碍物生成"那一刻写入飞行时长（见 bossAttacks / bossDirector），这里只管亮。
+    const w0 = laneWarn[0] > 0;
+    const w1 = laneWarn[1] > 0;
+    const w2 = laneWarn[2] > 0;
     const anyWarn = w0 || w1 || w2;
 
     // ---- 每列：墙面求交 ----

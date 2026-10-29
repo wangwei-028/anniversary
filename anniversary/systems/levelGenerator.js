@@ -29,7 +29,6 @@ export class LevelGenerator {
     this.photoCfg = level.photos || [];
     this.photosSaved = photosSaved || [false, false, false];
     this.photoPlaced = [false, false, false];
-    this.secMistakes = 0;
     this.starts = [];
     let t = 0;
     for (const sec of this.sections) {
@@ -102,7 +101,6 @@ export class LevelGenerator {
     if (idx !== this.sectionIndex && this.time < this.total) {
       if (this.sectionIndex >= 0) this.onSectionEnd(this.sections[this.sectionIndex], trackPos);
       this.sectionIndex = idx;
-      this.secMistakes = this.world.session.mistakes;
       if (this.onSection) this.onSection(this.sections[idx], idx);
     }
     this.checkSkillPhoto(trackPos);
@@ -196,17 +194,15 @@ export class LevelGenerator {
     }
   }
 
-  /** 挑战型：指定区段零失误通过 → 下一屏在路面刷出 */
+  /** 通过型：挺过指定区段 → 下一屏在路面刷出（不要求零失误，零失误判定太隐蔽难以达成） */
   onSectionEnd(sec, trackPos) {
     for (let i = 0; i < this.photoCfg.length; i++) {
       const c = this.photoCfg[i];
-      if (c.type !== 'challenge' || c.section !== sec.id || !this.photoAvailable(i)) continue;
-      if (this.world.session.mistakes === this.secMistakes) {
-        const z = WORLD.spawnZ - 25;
-        const lane = this.clearLane(z, 0);
-        this.pushPhoto(i, trackPos + z, lane === null ? 0 : lane, lane === null ? 2.3 : 0.9);
-        this.world.hud.tip('这一波零失误！前方出现了照片碎片！', 3);
-      }
+      if (c.type !== 'clear' || c.section !== sec.id || !this.photoAvailable(i)) continue;
+      const z = WORLD.spawnZ - 25;
+      const lane = this.clearLane(z, 0);
+      this.pushPhoto(i, trackPos + z, lane === null ? 0 : lane, lane === null ? 2.3 : 0.9);
+      this.world.hud.tip('挺过来了！前方出现了照片碎片！', 3);
     }
   }
 

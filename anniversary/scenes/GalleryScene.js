@@ -91,7 +91,7 @@ export class GalleryScene {
     }
     if (c.type === 'skill') return '技巧型：连续完美闪避 ' + c.streak + ' 次';
     const sec = lv.run.sections.find((s) => s.id === c.section);
-    return '挑战型：' + (sec ? sec.title : '某一波') + '零失误';
+    return '通过型：挺过「' + (sec ? sec.title : '某一波') + '」就会出现';
   }
 
   openPhoto(ph, lv, i) {

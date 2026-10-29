@@ -705,6 +705,10 @@ export class BossDirector {
           h.len = cfg.length;
           h.height = cfg.height;
           h.vz = cfg.speed * p.speedMul;
+          this.world.laneWarn[p.lane + 1] = Math.max(
+            this.world.laneWarn[p.lane + 1],
+            (this.data.z - 1) / (cfg.speed * p.speedMul) + 0.2,
+          );
           this.audio.play('throw', 1.1);
           break;
         }
@@ -745,9 +749,7 @@ export class BossDirector {
     const springLane = this.pickFreeLane();
     const m = this.speedMul();
     const telegraph = this.params.warning + cfg.telegraphExtra;
-    const travel = (this.data.z - 1) / (cfg.speed * m);
-    // 保留红灯：地毯长 8m，普通跳跃滞空 0.6s 飞不完全程，只有弹床那条道能活 = 事实上的"必须变道"
-    for (let l = -1; l <= 1; l++) if (l !== springLane) this.world.laneWarn[l + 1] = telegraph + travel;
+    // 红灯在"地毯上路"那一刻才亮（spawnCarpet 里写）：亮 = 地毯在路上，直到压过去
     this.boss.targetX = springLane * LANE_W;
     this.schedule(telegraph, 'carpet', springLane, 1, m, key);
     this.audio.play('warning');
@@ -756,6 +758,11 @@ export class BossDirector {
   spawnCarpet(springLane, m, key) {
     const cfg = this.data.bullets[key];
     const z0 = this.data.z - 1;
+    const travel = z0 / (cfg.speed * m);
+    // 保留红灯：地毯长 8m，普通跳跃滞空 0.6s 飞不完全程，只有弹床那条道能活 = 事实上的"必须变道"
+    for (let l = -1; l <= 1; l++) {
+      if (l !== springLane) this.world.laneWarn[l + 1] = Math.max(this.world.laneWarn[l + 1], travel + 0.2);
+    }
     const sp = this.world.spawnBullet('springboard', 'spring');
     sp.draw = 'decal';
     sp.x = springLane * LANE_W;
@@ -805,10 +812,9 @@ export class BossDirector {
     const free = this.pickFreeLane();
     const m = this.speedMul();
     const telegraph = this.params.warning + cfg.telegraphExtra;
-    const travel = (this.data.z - 1) / (cfg.speed * m);
+    // 红灯在"奶茶墙上路"那一刻才亮（updatePending 的 milkTea 分支里写）
     for (let l = -1; l <= 1; l++) {
       if (l === free) continue;
-      this.world.laneWarn[l + 1] = telegraph + travel + 0.2;
       this.schedule(telegraph, 'milkTea', l, 1, m);
     }
     this.boss.targetX = free * LANE_W * 0.5;

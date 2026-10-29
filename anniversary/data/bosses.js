@@ -720,21 +720,23 @@ export const BOSSES = {
       },
       {
         // 终局：记忆洪流（成对红圈投掷与成对占道墙交替，空档匀速移动）+ 各机制收尾
+        // 组合保留（洪流 + 木鱼波 / 追逐链 + 木鱼波），只放宽发射间隔：every ≥ 波长(6s)
+        // → 每轮波各发射一次，轮与轮之间的操作间隔从 ~2s 拉到 ~7s
         name: '记忆洪流',
         hint: '红圈与高墙交替推进，唯一空档一直在走 → 跟上它！',
         expression: 'angry',
         waves: [
           {
             spawns: [
-              { type: 'flood', every: 4.6, offset: 0.6 },
+              { type: 'flood', every: 6.6, offset: 0.6 },
               { type: 'ink', every: 12, offset: 6.0 },
             ],
           },
-          { spawns: [{ combo: [{ type: 'flood' }, { type: 'beatWave', delay: 1.6 }], every: 5.2, offset: 0.6 }] },
+          { spawns: [{ combo: [{ type: 'flood' }, { type: 'beatWave', delay: 1.6 }], every: 6.8, offset: 0.6 }] },
           {
             spawns: [
-              { type: 'flood', every: 4.2, offset: 0.5 },
-              { combo: [{ type: 'chaseChain' }, { type: 'beatWave', delay: 1.3 }], every: 4.6, offset: 2.6 },
+              { type: 'flood', every: 6.8, offset: 0.5 },
+              { combo: [{ type: 'chaseChain' }, { type: 'beatWave', delay: 1.3 }], every: 5.6, offset: 2.6 },
             ],
           },
         ],

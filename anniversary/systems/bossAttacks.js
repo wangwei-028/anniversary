@@ -268,9 +268,8 @@ export const ATTACKS = {
       d.lockLane = lane;
       d.lockLaneT = c.lockTime;
       const telegraph = d.params.warning + (c.telegraphExtra || 0.3);
-      const t = telegraph + travel(d, c);
-      d.world.laneWarn[lane + 1] = t + 0.3;
       d.boss.targetX = lane * LANE_W * 0.6;
+      // 红灯在"墙上路"那一刻才亮（PENDING.laneLock 里写），亮到它压过去
       d.schedule(telegraph, 'laneLock', lane, 1, m, key);
       if (key === 'tentacle' && c.reSlam) {
         // 触手会在同一道再拍一次，封锁感更足
@@ -491,6 +490,11 @@ export const PENDING = {
     h.len = c.length;
     h.height = c.height; // 3m+：跳不过去，只能换道
     h.vz = c.speed * p.speedMul;
+    // 墙刚上路就亮红灯，一直亮到压过去（reSlam 二次拍击生成时会重新写一遍）
+    d.world.laneWarn[p.lane + 1] = Math.max(
+      d.world.laneWarn[p.lane + 1],
+      (d.data.z - 1) / (c.speed * p.speedMul) + 0.3,
+    );
     d.audio.play(p.key === 'pit' ? 'bossLand' : 'bubble', 1.2, 0.5);
   },
 
@@ -509,7 +513,7 @@ export const PENDING = {
     h.len = c.length;
     h.height = c.height;
     h.vz = c.speed * p.speedMul;
-    d.world.laneWarn[p.lane + 1] = c.beat + travel(d, c) + 0.15;
+    d.world.laneWarn[p.lane + 1] = Math.max(d.world.laneWarn[p.lane + 1], travel(d, c) + 0.15);
     d.audio.play('tock', 1.15);
   },
 
@@ -604,7 +608,7 @@ export const PENDING = {
     h.len = 1.2;
     h.height = 2.2;
     h.vz = c.wallSpeed * p.speedMul;
-    // 警戒时长 = 恰好飞行时间：渲染层只显示最后 0.5s，两拍墙（间隔 0.55s）的警戒线不重叠
+    // 警戒时长 = 恰好飞行时间：墙一上路这条道就亮红线，亮到它压过去
     d.world.laneWarn[p.lane + 1] = travel;
     d.audio.play('tock', 1.15);
   },

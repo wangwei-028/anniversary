@@ -581,7 +581,7 @@ export class World {
           const dur = tau + h.len / Math.max(1, speed + (h.vz || 0));
           // 红灯只留给跳不过（≥跳跃顶点 1.8m）也铲不过的障碍：小丑彩带 1.6m 可跳过 → 只响警示音
           if (h.kind === 'full' && h.height >= PLAYER.jumpHeight) {
-            // 车道红线只跟到"即将压到"为止（渲染层只显示最后一段）：潮水整个淹没期间靠水面画面本身提示
+            // 红线从现在（潮头可见、警示音响起）一直亮到压过去 +0.3s：整个淹没期间这条道持续标红
             const laneDur = Math.min(dur, tau + 0.3);
             for (let l = 0; l < h.lanes; l++) {
               const li = h.lane + l + 1;

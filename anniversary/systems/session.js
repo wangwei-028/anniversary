@@ -58,7 +58,7 @@ export class GameSession {
     this.perfects = 0;
     this.heartsLost = 0;
     this.bossHeartsLost = 0;
-    this.mistakes = 0; // 受击 / 擦碰 / 护盾被打破次数（"零失误"挑战型照片碎片用）
+    this.mistakes = 0; // 受击 / 擦碰 / 护盾被打破次数（仅统计记录）
     this.powerups = { magnet: 0, coinRain: 0, springShoes: 0 };
     if (loadout.includes('startMagnet')) this.powerups.magnet = getItem('startMagnet').magnetTime;
     this.ammo = 0; // 投掷型还击的备用弹药（回忆道具）
